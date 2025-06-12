@@ -1,0 +1,140 @@
+/* Prices.css */
+
+.prices-container {
+  padding: 30px;
+  background-color: #f9f9f9;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #222;
+  min-height: 100vh;
+}
+
+h2, h3 {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.filters, .button-group {
+  margin: 10px 0 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filters input, .manual-form input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+button {
+  padding: 8px 14px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #388e3c;
+}
+
+.button-group button {
+  margin-right: 10px;
+}
+
+.delete-btn {
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background-color: #c9302c;
+}
+
+#price-table, table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  background-color: #fff;
+}
+
+#price-table th, #price-table td, th, td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+#price-table th, th {
+  background-color: #007b5e;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #dff0d8;
+}
+
+/* Highlight today’s prices */
+tr[style] {
+  font-weight: bold;
+  color: green;
+}
+
+/* Responsive chart spacing */
+h3 + .recharts-responsive-container {
+  margin-top: 20px;
+}
+
+.manual-form {
+  margin-top: 40px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.manual-form h3 {
+  margin-bottom: 15px;
+}
+
+.manual-form form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.manual-form input, .manual-form button {
+  padding: 8px;
+  width: calc(100% - 12px);
+  max-width: 300px;
+}
+
+.search-input {
+  padding: 10px;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+  .filters, .button-group, .manual-form form {
+    flex-direction: column;
+  }
+
+  input, button {
+    width: 100%;
+  }
+}
