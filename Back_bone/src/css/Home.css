@@ -1,0 +1,289 @@
+/* Home.css - Cleaned and Enhanced */
+
+.home-container {
+  padding: 40px 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9ff 0%, #e8f4f8 50%, #f0f8e8 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.home-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(120, 200, 120, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(100, 150, 250, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 60%, rgba(255, 200, 100, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.home-container > * {
+  position: relative;
+  z-index: 1;
+}
+
+.home-container h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, #2c5530 0%, #4a7c59 50%, #6b8e23 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  animation: fadeInDown 0.8s ease-out;
+  position: relative;
+}
+
+.home-container h1::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, #6b8e23, #4a7c59);
+  border-radius: 2px;
+  animation: expandWidth 1s ease-out 0.5s both;
+}
+
+.home-container p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  color: #555;
+  font-weight: 400;
+  line-height: 1.6;
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 40px;
+}
+
+.home-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.home-card {
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  padding: 25px 20px;
+  border-radius: 15px;
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.1),
+    0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  text-decoration: none;
+  color: #333;
+  opacity: 0;
+  animation-fill-mode: both;
+}
+
+.home-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.6s ease;
+}
+
+.home-card:hover::before {
+  left: 100%;
+}
+
+.home-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.15),
+    0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.home-card:nth-child(1) {
+  animation: slideInLeft 0.6s ease-out 0.1s both;
+}
+.home-card:nth-child(2) {
+  animation: slideInRight 0.6s ease-out 0.2s both;
+}
+.home-card:nth-child(3) {
+  animation: slideInLeft 0.6s ease-out 0.3s both;
+}
+.home-card:nth-child(4) {
+  animation: slideInRight 0.6s ease-out 0.4s both;
+}
+
+.home-card h3 {
+  margin-bottom: 12px;
+  color: #2c5530;
+  font-size: 1.3rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.home-card:hover h3 {
+  color: #4a7c59;
+  transform: translateY(-2px);
+}
+
+.home-card p {
+  color: #666;
+  line-height: 1.6;
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+  margin-bottom: 0;
+}
+
+.home-card:hover p {
+  color: #555;
+}
+
+/* Specific hover effects for different cards */
+.home-card:nth-child(1):hover {
+  background: linear-gradient(145deg, #f0f8e8, #e8f5e8);
+  border-left: 4px solid #6b8e23;
+}
+.home-card:nth-child(2):hover {
+  background: linear-gradient(145deg, #e8f4f8, #d4edda);
+  border-left: 4px solid #17a2b8;
+}
+.home-card:nth-child(3):hover {
+  background: linear-gradient(145deg, #fff3cd, #ffeaa7);
+  border-left: 4px solid #fd7e14;
+}
+.home-card:nth-child(4):hover {
+  background: linear-gradient(145deg, #f8d7da, #f5c6cb);
+  border-left: 4px solid #dc3545;
+}
+
+/* Hover effect for all cards when one is hovered */
+.home-container:hover .home-card:not(:hover) {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+/* Glow effect */
+.home-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(106, 142, 35, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.home-card:hover::after {
+  opacity: 1;
+}
+
+/* Focus style for accessibility */
+.home-card:focus {
+  outline: 2px solid #4a7c59;
+  outline-offset: 2px;
+}
+
+/* Animations */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes expandWidth {
+  from { width: 0; }
+  to { width: 80px; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .home-container {
+    padding: 30px 15px;
+  }
+
+  .home-container h1 {
+    font-size: 2rem;
+  }
+
+  .home-container p {
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+  }
+
+  .home-sections {
+    gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .home-card {
+    padding: 20px 15px;
+  }
+
+  .home-card h3 {
+    font-size: 1.2rem;
+  }
+
+  .home-card p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-container {
+    padding: 20px 10px;
+  }
+
+  .home-container h1 {
+    font-size: 1.8rem;
+  }
+
+  .home-sections {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .home-card {
+    padding: 18px 12px;
+  }
+
+  .home-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+  }
+}
