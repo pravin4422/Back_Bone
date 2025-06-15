@@ -18,6 +18,9 @@ app.use(express.urlencoded({ extended: true }));
 const userRoutes = require('./routes/userRoutes');
 app.use('/api/auth', userRoutes);
 
+const pricesRoutes = require('./routes/prices');
+app.use('/api/prices', pricesRoutes);
+
 // Test route
 app.get('/', (req, res) => {
   res.json({ 
@@ -32,7 +35,7 @@ app.use('*', (req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-// Error handling middleware
+// Error handler
 app.use((err, req, res, next) => {
   console.error('Error:', err.stack);
   res.status(500).json({ 

@@ -19,17 +19,25 @@ function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const storedUser = {
-      displayName: localStorage.getItem('displayName'),
-      email: localStorage.getItem('userEmail'),
+  const token = localStorage.getItem('token');
+  const displayName = localStorage.getItem('displayName');
+  const email = localStorage.getItem('userEmail');
+
+  if (token && displayName && email) {
+    setUser({
+      displayName,
+      email,
       phone: localStorage.getItem('phone'),
       photoURL: localStorage.getItem('photoURL'),
-    };
+    });
+  } else if (token) {
+    // fallback: assume user is logged in, even if details are missing
+    setUser(true); // important: makes user truthy so <PrivateRoute> doesn't block
+  } else {
+    setUser(null);
+  }
+}, []);
 
-    if (storedUser.displayName && storedUser.email) {
-      setUser(storedUser);
-    }
-  }, []);
 
   return (
     <Router>

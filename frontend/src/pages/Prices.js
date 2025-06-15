@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import '../css/Prices.css';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
-
-const API_KEY = 'YOUR_API_KEY_HERE'; // Replace with your actual key
-const API_URL = `https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?api-key=${API_KEY}&format=json&limit=100`;
+import '../css/Prices.css';
 
 function Prices() {
   const [apiPrices, setApiPrices] = useState([]);
-  const [manualPrices, setManualPrices] = useState([]);
+  const [userPrices, setUserPrices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     commodity: '',
@@ -22,54 +19,117 @@ function Prices() {
   const [filterMinPrice, setFilterMinPrice] = useState('');
   const [filterMaxPrice, setFilterMaxPrice] = useState('');
 
-  const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+  const today = new Date().toISOString().split('T')[0];
 
-  useEffect(() => {
-    const storedManual = localStorage.getItem('manualPrices');
-    if (storedManual) {
-      setManualPrices(JSON.parse(storedManual));
-    }
-  }, []);
-
-  useEffect(() => {
-    fetch(API_URL)
-      .then(res => res.json())
-      .then(data => {
-        setApiPrices(data.records || []);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error("Error fetching prices:", err);
-        setLoading(false);
+  // Fetch user prices from database
+  const fetchUserPrices = async () => {
+    try {
+      console.log('Making API call to fetch user prices');
+      const response = await fetch('/api/prices/my-prices', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
+
+      console.log('API response status:', response.status);
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('User prices fetched successfully:', data.length, 'items');
+        setUserPrices(data);
+      } else {
+        console.log('API error:', response.status);
+        setUserPrices([]);
+      }
+    } catch (error) {
+      console.error('Error fetching user prices:', error);
+      setUserPrices([]);
+    }
+  };
+
+  useEffect(() => {
+    // API call to fetch prices would go here
+    // For now, just set loading to false
+    setTimeout(() => {
+      setApiPrices([]);
+    }, 1000);
+    
+    // Fetch user prices from database
+    fetchUserPrices().finally(() => setLoading(false));
   }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleAdd = (e) => {
+  const handleAdd = async (e) => {
     e.preventDefault();
-    if (formData.commodity && formData.market) {
-      const newList = [...manualPrices, { ...formData }];
-      setManualPrices(newList);
-      localStorage.setItem('manualPrices', JSON.stringify(newList));
-      setFormData({
-        commodity: '',
-        market: '',
-        state: '',
-        min_price: '',
-        max_price: '',
-        arrival_date: ''
+
+    try {
+      const response = await fetch('/api/prices/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          commodity: formData.commodity,
+          market: formData.market,
+          state: formData.state,
+          min_price: formData.min_price,
+          max_price: formData.max_price,
+          arrival_date: formData.arrival_date
+        })
       });
+
+      if (response.ok) {
+        const savedPrice = await response.json();
+        setUserPrices(prev => [...prev, savedPrice]);
+        setFormData({
+          commodity: '',
+          market: '',
+          state: '',
+          min_price: '',
+          max_price: '',
+          arrival_date: ''
+        });
+        alert("Price added successfully!");
+      } else {
+        const errorData = await response.json();
+        alert(`Error: ${errorData.error || 'Failed to add price'}`);
+      }
+    } catch (error) {
+      console.error('Error adding price:', error);
+      alert("Network error. Please try again.");
     }
   };
 
-  const handleDelete = (index) => {
-    const updated = [...manualPrices];
-    updated.splice(index, 1);
-    setManualPrices(updated);
-    localStorage.setItem('manualPrices', JSON.stringify(updated));
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this price entry?")) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/prices/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        setUserPrices(prev => prev.filter(p => p._id !== id));
+        alert("Price deleted successfully!");
+      } else if (response.status === 404) {
+        alert("Price entry not found.");
+      } else {
+        const errorData = await response.json();
+        alert(`Error: ${errorData.error || 'Failed to delete price'}`);
+      }
+    } catch (error) {
+      console.error('Error deleting price:', error);
+      alert("Network error. Please try again.");
+    }
   };
 
   const formatDateWithDay = (dateStr) => {
@@ -83,7 +143,7 @@ function Prices() {
     });
   };
 
-  const combinedPrices = [...manualPrices, ...apiPrices].filter(item => {
+  const combinedPrices = [...userPrices, ...apiPrices].filter(item => {
     const matchQuery =
       item.commodity?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.state?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -124,9 +184,23 @@ function Prices() {
   const handlePrint = () => {
     const printWindow = window.open('', '', 'width=800,height=600');
     const tableHtml = document.getElementById('price-table').outerHTML;
-    printWindow.document.write('<html><head><title>Print</title></head><body>');
-    printWindow.document.write(tableHtml);
-    printWindow.document.write('</body></html>');
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Market Prices Report</title>
+          <style>
+            table { border-collapse: collapse; width: 100%; }
+            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+            th { background-color: #f2f2f2; }
+            .today-row { background-color: #e0ffe0; }
+          </style>
+        </head>
+        <body>
+          <h1>Market Prices Report</h1>
+          ${tableHtml}
+        </body>
+      </html>
+    `);
     printWindow.document.close();
     printWindow.print();
   };
@@ -148,114 +222,227 @@ function Prices() {
   Object.values(priceMap).forEach(entry => {
     chartData.push({
       commodity: entry.commodity,
-      avgPrice: (entry.total / entry.count).toFixed(2)
+      avgPrice: parseFloat((entry.total / entry.count).toFixed(2))
     });
   });
 
   return (
     <div className="prices-container">
-      <h2>Market Prices</h2>
+      <h2>Market Prices Dashboard</h2>
       <p>Today: {formatDateWithDay(today)}</p>
 
       <div className="filters">
-        <input type="text" placeholder="Search Commodity/Market/State" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-        <input type="date" value={filterDate} onChange={(e) => setFilterDate(e.target.value)} />
-        <input type="number" placeholder="Min Price" value={filterMinPrice} onChange={(e) => setFilterMinPrice(e.target.value)} />
-        <input type="number" placeholder="Max Price" value={filterMaxPrice} onChange={(e) => setFilterMaxPrice(e.target.value)} />
+        <input 
+          type="text" 
+          placeholder="🔍 Search Commodity/Market/State" 
+          value={searchQuery} 
+          onChange={(e) => setSearchQuery(e.target.value)} 
+        />
+        <input 
+          type="date" 
+          value={filterDate} 
+          onChange={(e) => setFilterDate(e.target.value)} 
+        />
+        <input 
+          type="number" 
+          placeholder="Min Price (₹)" 
+          value={filterMinPrice} 
+          onChange={(e) => setFilterMinPrice(e.target.value)} 
+        />
+        <input 
+          type="number" 
+          placeholder="Max Price (₹)" 
+          value={filterMaxPrice} 
+          onChange={(e) => setFilterMaxPrice(e.target.value)} 
+        />
       </div>
 
       <div className="button-group">
-        <button onClick={handleExportCSV}>Export to CSV</button>
-        <button onClick={handlePrint}>Print</button>
+        <button onClick={handleExportCSV}>📊 Export to CSV</button>
+        <button onClick={handlePrint}>🖨️ Print Report</button>
       </div>
 
-      {loading ? <p>Loading...</p> : (
+      {loading ? (
+        <p className="loading">Loading market data...</p>
+      ) : (
         <>
-          <h3>Today's Prices</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Commodity</th>
-                <th>Market</th>
-                <th>State</th>
-                <th>Min Price</th>
-                <th>Max Price</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {todayPrices.map((item, idx) => (
-                <tr key={idx}>
-                  <td>{item.commodity}</td>
-                  <td>{item.market}</td>
-                  <td>{item.state}</td>
-                  <td>{item.min_price}</td>
-                  <td>{item.max_price}</td>
-                  <td>{formatDateWithDay(item.arrival_date)}</td>
+          <h3>📈 Today's Market Prices</h3>
+          {todayPrices.length > 0 ? (
+            <table>
+              <thead>
+                <tr>
+                  <th>Commodity</th>
+                  <th>Market</th>
+                  <th>State</th>
+                  <th>Min Price (₹)</th>
+                  <th>Max Price (₹)</th>
+                  <th>Date</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {todayPrices.map((item, idx) => (
+                  <tr key={idx} className="today-row">
+                    <td><strong>{item.commodity}</strong></td>
+                    <td>{item.market}</td>
+                    <td>{item.state}</td>
+                    <td>₹{item.min_price}</td>
+                    <td>₹{item.max_price}</td>
+                    <td>{formatDateWithDay(item.arrival_date)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p className="no-data">No prices available for today</p>
+          )}
 
+          <h3>📋 All Market Prices</h3>
           <table id="price-table">
             <thead>
               <tr>
                 <th>Commodity</th>
                 <th>Market</th>
                 <th>State</th>
-                <th>Min Price</th>
-                <th>Max Price</th>
+                <th>Min Price (₹)</th>
+                <th>Max Price (₹)</th>
                 <th>Date</th>
-                <th>Is Today?</th>
+                <th>Today?</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {combinedPrices.map((item, idx) => {
+              {combinedPrices.length > 0 ? combinedPrices.map((item, idx) => {
                 const isToday = item.arrival_date === today;
+                const isUserPrice = userPrices.some(p => p._id === item._id);
                 return (
-                  <tr key={idx} style={isToday ? { backgroundColor: '#e0ffe0' } : {}}>
-                    <td>{item.commodity}</td>
+                  <tr key={item._id || idx} className={isToday ? 'today-row' : ''}>
+                    <td><strong>{item.commodity}</strong></td>
                     <td>{item.market}</td>
                     <td>{item.state}</td>
-                    <td>{item.min_price}</td>
-                    <td>{item.max_price}</td>
+                    <td>₹{item.min_price}</td>
+                    <td>₹{item.max_price}</td>
                     <td>{formatDateWithDay(item.arrival_date)}</td>
-                    <td>{isToday ? '✅ Yes' : '❌ No'}</td>
                     <td>
-                      {manualPrices.includes(item) && (
-                        <button onClick={() => handleDelete(manualPrices.indexOf(item))}>Delete</button>
+                      <span className="status-badge">
+                        {isToday ? '✅ Yes' : '❌ No'}
+                      </span>
+                    </td>
+                    <td>
+                      {isUserPrice && (
+                        <button onClick={() => handleDelete(item._id)}>🗑️ Delete</button>
                       )}
                     </td>
                   </tr>
                 );
-              })}
+              }) : (
+                <tr>
+                  <td colSpan="8" className="no-data">No data available</td>
+                </tr>
+              )}
             </tbody>
           </table>
 
           <div className="manual-form">
-            <h3>Add New Price</h3>
+            <h3>➕ Add New Price Entry</h3>
             <form onSubmit={handleAdd}>
-              <input type="text" name="commodity" placeholder="Commodity" value={formData.commodity} onChange={handleChange} required />
-              <input type="text" name="market" placeholder="Market" value={formData.market} onChange={handleChange} required />
-              <input type="text" name="state" placeholder="State" value={formData.state} onChange={handleChange} />
-              <input type="number" name="min_price" placeholder="Min Price" value={formData.min_price} onChange={handleChange} />
-              <input type="number" name="max_price" placeholder="Max Price" value={formData.max_price} onChange={handleChange} />
-              <input type="date" name="arrival_date" value={formData.arrival_date} onChange={handleChange} required />
-              <button type="submit">Add</button>
+              <input 
+                type="text" 
+                name="commodity" 
+                placeholder="Commodity (e.g., Rice, Wheat)" 
+                value={formData.commodity} 
+                onChange={handleChange} 
+                required 
+              />
+              <input 
+                type="text" 
+                name="market" 
+                placeholder="Market Name" 
+                value={formData.market} 
+                onChange={handleChange} 
+                required 
+              />
+              <input 
+                type="text" 
+                name="state" 
+                placeholder="State" 
+                value={formData.state} 
+                onChange={handleChange} 
+                required
+              />
+              <input 
+                type="number" 
+                name="min_price" 
+                placeholder="Minimum Price (₹)" 
+                value={formData.min_price} 
+                onChange={handleChange} 
+                required
+                min="0"
+                step="0.01"
+              />
+              <input 
+                type="number" 
+                name="max_price" 
+                placeholder="Maximum Price (₹)" 
+                value={formData.max_price} 
+                onChange={handleChange} 
+                required
+                min="0"
+                step="0.01"
+              />
+              <input 
+                type="date" 
+                name="arrival_date" 
+                value={formData.arrival_date} 
+                onChange={handleChange} 
+                required 
+              />
+              <button type="submit">
+                ➕ Add Price Entry
+              </button>
             </form>
           </div>
 
-          <h3>Average Price by Commodity</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="commodity" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="avgPrice" fill="#8884d8" />
-            </BarChart>
-          </ResponsiveContainer>
+          {chartData.length > 0 && (
+            <div className="chart-container">
+              <h3>📊 Average Price by Commodity</h3>
+              <ResponsiveContainer width="100%" height={350}>
+                <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#ecf0f1" />
+                  <XAxis 
+                    dataKey="commodity" 
+                    tick={{ fontSize: 12 }}
+                    angle={-45}
+                    textAnchor="end"
+                    height={60}
+                  />
+                  <YAxis 
+                    tick={{ fontSize: 12 }}
+                    label={{ value: 'Price (₹)', angle: -90, position: 'insideLeft' }}
+                  />
+                  <Tooltip 
+                    formatter={(value) => [`₹${value}`, 'Avg Price']}
+                    labelStyle={{ color: '#2c3e50' }}
+                    contentStyle={{ 
+                      backgroundColor: '#fff', 
+                      border: '1px solid #ddd',
+                      borderRadius: '6px'
+                    }}
+                  />
+                  <Bar 
+                    dataKey="avgPrice" 
+                    fill="url(#colorGradient)"
+                    radius={[4, 4, 0, 0]}
+                  />
+                  <defs>
+                    <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#3498db" />
+                      <stop offset="100%" stopColor="#2980b9" />
+                    </linearGradient>
+                  </defs>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          )}
         </>
       )}
     </div>

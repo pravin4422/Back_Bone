@@ -8,13 +8,12 @@ function Header({ user, setUser }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Get user details from localStorage
-  const displayName = localStorage.getItem('displayName') || 'No Name';
-  const userEmail = localStorage.getItem('userEmail') || 'No Email';
-  const phone = localStorage.getItem('phone') || 'Not provided';
-  const photoURL = localStorage.getItem('photoURL') || 'https://via.placeholder.com/40';
+  const [displayName, setDisplayName] = useState(localStorage.getItem('displayName') || 'No Name');
+  const [userEmail, setUserEmail] = useState(localStorage.getItem('userEmail') || 'No Email');
+  const [phone, setPhone] = useState(localStorage.getItem('phone') || 'Not provided');
+  const [photoURL, setPhotoURL] = useState(localStorage.getItem('photoURL') || 'https://via.placeholder.com/40');
 
-  // Close dropdown when clicking outside
+  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -25,8 +24,43 @@ function Header({ user, setUser }) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // OPTIONAL: Fetch latest user info from backend on mount
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        const response = await fetch('http://localhost:5000/api/user/profile', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setDisplayName(data.displayName || 'No Name');
+          setUserEmail(data.email || 'No Email');
+          setPhone(data.phone || 'Not provided');
+          setPhotoURL(data.photoURL || 'https://via.placeholder.com/40');
+
+          // Update localStorage
+          localStorage.setItem('displayName', data.displayName || '');
+          localStorage.setItem('userEmail', data.email || '');
+          localStorage.setItem('phone', data.phone || '');
+          localStorage.setItem('photoURL', data.photoURL || '');
+        } else {
+          console.error('Failed to fetch user profile');
+        }
+      } catch (error) {
+        console.error('Error fetching user profile:', error.message);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   const handleLogout = () => {
-    // Clear localStorage and reset user
     localStorage.clear();
     setUser(null);
     setShowDropdown(false);
