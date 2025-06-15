@@ -21,6 +21,26 @@ function Prices() {
 
   const today = new Date().toISOString().split('T')[0];
 
+  // Helper function to normalize date to YYYY-MM-DD format
+  const normalizeDate = (dateStr) => {
+    if (!dateStr) return null;
+    try {
+      const date = new Date(dateStr);
+      // Check if date is valid
+      if (isNaN(date.getTime())) return null;
+      return date.toISOString().split('T')[0];
+    } catch (error) {
+      console.error('Error normalizing date:', dateStr, error);
+      return null;
+    }
+  };
+
+  // Check if a date is today
+  const isToday = (dateStr) => {
+    const normalizedDate = normalizeDate(dateStr);
+    return normalizedDate === today;
+  };
+
   // Fetch user prices from database
   const fetchUserPrices = async () => {
     try {
@@ -37,7 +57,12 @@ function Prices() {
       if (response.ok) {
         const data = await response.json();
         console.log('User prices fetched successfully:', data.length, 'items');
-        setUserPrices(data);
+        // Normalize dates when setting user prices
+        const normalizedData = data.map(item => ({
+          ...item,
+          arrival_date: normalizeDate(item.arrival_date) || item.arrival_date
+        }));
+        setUserPrices(normalizedData);
       } else {
         console.log('API error:', response.status);
         setUserPrices([]);
@@ -84,7 +109,12 @@ function Prices() {
 
       if (response.ok) {
         const savedPrice = await response.json();
-        setUserPrices(prev => [...prev, savedPrice]);
+        // Normalize the date of the newly added price
+        const normalizedPrice = {
+          ...savedPrice,
+          arrival_date: normalizeDate(savedPrice.arrival_date) || savedPrice.arrival_date
+        };
+        setUserPrices(prev => [...prev, normalizedPrice]);
         setFormData({
           commodity: '',
           market: '',
@@ -134,13 +164,19 @@ function Prices() {
 
   const formatDateWithDay = (dateStr) => {
     if (!dateStr) return '—';
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('en-IN', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
+    try {
+      const date = new Date(dateStr);
+      if (isNaN(date.getTime())) return '—';
+      return date.toLocaleDateString('en-IN', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+    } catch (error) {
+      console.error('Error formatting date:', dateStr, error);
+      return '—';
+    }
   };
 
   const combinedPrices = [...userPrices, ...apiPrices].filter(item => {
@@ -149,14 +185,18 @@ function Prices() {
       item.state?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.market?.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchDate = !filterDate || item.arrival_date === filterDate;
+    const normalizedItemDate = normalizeDate(item.arrival_date);
+    const normalizedFilterDate = normalizeDate(filterDate);
+    
+    const matchDate = !filterDate || normalizedItemDate === normalizedFilterDate;
     const matchMinPrice = !filterMinPrice || parseFloat(item.min_price) >= parseFloat(filterMinPrice);
     const matchMaxPrice = !filterMaxPrice || parseFloat(item.max_price) <= parseFloat(filterMaxPrice);
 
     return matchQuery && matchDate && matchMinPrice && matchMaxPrice;
   });
 
-  const todayPrices = combinedPrices.filter(item => item.arrival_date === today);
+  // Filter today's prices using the improved isToday function
+  const todayPrices = combinedPrices.filter(item => isToday(item.arrival_date));
 
   const handleExportCSV = () => {
     const csvHeader = ['Commodity', 'Market', 'State', 'Min Price', 'Max Price', 'Date', 'Is Today'];
@@ -167,7 +207,7 @@ function Prices() {
       row.min_price,
       row.max_price,
       row.arrival_date || '—',
-      row.arrival_date === today ? 'Yes' : 'No'
+      isToday(row.arrival_date) ? 'Yes' : 'No'
     ]);
     const csvContent =
       [csvHeader, ...csvRows].map(e => e.join(',')).join('\n');
@@ -266,7 +306,7 @@ function Prices() {
         <p className="loading">Loading market data...</p>
       ) : (
         <>
-          <h3>📈 Today's Market Prices</h3>
+          <h3>📈 Today's Market Prices ({todayPrices.length} items)</h3>
           {todayPrices.length > 0 ? (
             <table>
               <thead>
@@ -312,10 +352,10 @@ function Prices() {
             </thead>
             <tbody>
               {combinedPrices.length > 0 ? combinedPrices.map((item, idx) => {
-                const isToday = item.arrival_date === today;
+                const itemIsToday = isToday(item.arrival_date);
                 const isUserPrice = userPrices.some(p => p._id === item._id);
                 return (
-                  <tr key={item._id || idx} className={isToday ? 'today-row' : ''}>
+                  <tr key={item._id || idx} className={itemIsToday ? 'today-row' : ''}>
                     <td><strong>{item.commodity}</strong></td>
                     <td>{item.market}</td>
                     <td>{item.state}</td>
@@ -324,7 +364,7 @@ function Prices() {
                     <td>{formatDateWithDay(item.arrival_date)}</td>
                     <td>
                       <span className="status-badge">
-                        {isToday ? '✅ Yes' : '❌ No'}
+                        {itemIsToday ? '✅ Yes' : '❌ No'}
                       </span>
                     </td>
                     <td>

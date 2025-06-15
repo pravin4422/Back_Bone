@@ -1,98 +1,407 @@
-/* Full-page layout */
+/* Login.css - Modern Login Form */
+
+/* Reset and Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.6;
+}
+
+/* Login Wrapper */
 .login-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-height: 100vh;
-  background: linear-gradient(to right, #e0f7fa, #ffe0f0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 20px;
-}
-
-/* Card container */
-.login-card {
-  background-color: #fff;
-  padding: 35px 30px;
-  border-radius: 16px;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-  max-width: 400px;
-  width: 100%;
-  text-align: center;
-}
-
-/* Heading */
-.login-card h2 {
-  margin-bottom: 25px;
-  color: #333;
-  font-size: 26px;
-}
-
-/* Inputs */
-.login-card input {
-  width: 100%;
-  padding: 12px 14px;
-  margin: 12px 0;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 16px;
-  transition: border 0.2s;
-}
-
-.login-card input:focus {
-  outline: none;
-  border-color: #4caf50;
-}
-
-/* Password input with icon */
-.password-wrapper {
   position: relative;
 }
 
+.login-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
+  pointer-events: none;
+}
+
+/* Login Card */
+.login-card {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+  backdrop-filter: blur(10px);
+}
+
+.login-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 16px 16px 0 0;
+}
+
+/* Login Header */
+.login-card h2 {
+  text-align: center;
+  margin-bottom: 32px;
+  color: #2d3748;
+  font-size: 2rem;
+  font-weight: 700;
+  position: relative;
+}
+
+.login-card h2::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 2px;
+}
+
+/* Form Styles */
+.login-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Input Styles */
+.login-card input[type="email"] {
+  width: 100%;
+  padding: 16px 20px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background: #f8fafc;
+  color: #2d3748;
+}
+
+.login-card input[type="email"]:focus {
+  outline: none;
+  border-color: #667eea;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  transform: translateY(-2px);
+}
+
+.login-card input[type="email"]::placeholder {
+  color: #a0aec0;
+  font-weight: 400;
+}
+
+/* Password Wrapper */
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding: 16px 50px 16px 20px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background: #f8fafc;
+  color: #2d3748;
+}
+
+.password-wrapper input:focus {
+  outline: none;
+  border-color: #667eea;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  transform: translateY(-2px);
+}
+
+.password-wrapper input::placeholder {
+  color: #a0aec0;
+  font-weight: 400;
+}
+
+/* Toggle Password Button */
 .toggle-password {
   position: absolute;
-  right: 12px;
+  right: 16px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 18px;
   cursor: pointer;
+  font-size: 20px;
+  padding: 4px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
 }
 
-/* Button */
-.login-card button {
+.toggle-password:hover {
+  background: rgba(102, 126, 234, 0.1);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.toggle-password:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+/* Login Button */
+.login-card button[type="submit"] {
   width: 100%;
-  padding: 12px;
-  background-color: #4caf50;
+  padding: 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  font-size: 18px;
-  font-weight: bold;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  margin-top: 10px;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.login-card button:hover {
-  background-color: #43a047;
+.login-card button[type="submit"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
 }
 
-/* Signup link */
+.login-card button[type="submit"]:active {
+  transform: translateY(0);
+}
+
+.login-card button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Signup Text */
 .signup-text {
-  margin-top: 20px;
+  text-align: center;
+  margin-top: 24px;
+  color: #718096;
   font-size: 14px;
-  color: #555;
 }
 
 .signup-text a {
-  color: #4caf50;
+  color: #667eea;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 600;
+  transition: color 0.2s ease;
 }
 
 .signup-text a:hover {
+  color: #764ba2;
   text-decoration: underline;
 }
 
-/* Toast */
+/* Loading State */
+.login-card button[type="submit"]:disabled::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Toast Container Customization */
+.Toastify__toast-container {
+  font-family: inherit;
+}
+
 .Toastify__toast {
-  font-size: 14px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-weight: 500;
+}
+
+.Toastify__toast--success {
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+}
+
+.Toastify__toast--error {
+  background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .login-wrapper {
+    padding: 16px;
+  }
+  
+  .login-card {
+    padding: 32px 24px;
+    max-width: 100%;
+  }
+  
+  .login-card h2 {
+    font-size: 1.75rem;
+    margin-bottom: 24px;
+  }
+  
+  .login-card form {
+    gap: 16px;
+  }
+  
+  .login-card input[type="email"],
+  .password-wrapper input {
+    padding: 14px 18px;
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+  
+  .password-wrapper input {
+    padding-right: 48px;
+  }
+  
+  .login-card button[type="submit"] {
+    padding: 14px;
+    font-size: 16px;
+  }
+  
+  .toggle-password {
+    right: 14px;
+    font-size: 18px;
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-wrapper {
+    padding: 12px;
+  }
+  
+  .login-card {
+    padding: 24px 20px;
+  }
+  
+  .login-card h2 {
+    font-size: 1.5rem;
+  }
+  
+  .login-card input[type="email"],
+  .password-wrapper input {
+    padding: 12px 16px;
+  }
+  
+  .password-wrapper input {
+    padding-right: 44px;
+  }
+  
+  .login-card button[type="submit"] {
+    padding: 12px;
+  }
+  
+  .toggle-password {
+    right: 12px;
+    font-size: 16px;
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .login-card {
+    border: 2px solid #2d3748;
+  }
+  
+  .login-card input[type="email"],
+  .password-wrapper input {
+    border-color: #2d3748;
+  }
+  
+  .login-card button[type="submit"] {
+    background: #2d3748;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus Visible */
+.login-card input:focus-visible,
+.login-card button:focus-visible,
+.login-card a:focus-visible {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .login-wrapper {
+    background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+  }
+  
+  .login-card {
+    background: #2d3748;
+    color: #e2e8f0;
+  }
+  
+  .login-card h2 {
+    color: #e2e8f0;
+  }
+  
+  .login-card input[type="email"],
+  .password-wrapper input {
+    background: #4a5568;
+    border-color: #718096;
+    color: #e2e8f0;
+  }
+  
+  .login-card input[type="email"]:focus,
+  .password-wrapper input:focus {
+    background: #4a5568;
+    border-color: #667eea;
+  }
+  
+  .login-card input::placeholder {
+    color: #a0aec0;
+  }
+  
+  .signup-text {
+    color: #a0aec0;
+  }
 }

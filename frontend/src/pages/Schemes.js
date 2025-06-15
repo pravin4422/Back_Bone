@@ -407,25 +407,31 @@ function Schemes() {
 
   return (
     <div className="schemes-wrapper">
+      {/* Header Section */}
       <div className="schemes-header">
-        <h1>🌾 Government Schemes for Farmers</h1>
+        <div className="header-icon">🌾</div>
+        <h1>Government Schemes for Farmers</h1>
         <p>Explore various government schemes designed to support farmers across India and Tamil Nadu. Click on any scheme to view details or search online for more information.</p>
       </div>
 
+      {/* Filters Section */}
       <div className="schemes-filters">
-        <div className="search-bar">
+        <div className="search-container">
+          <div className="search-icon">🔍</div>
           <input
             type="search"
             placeholder="Search schemes by name or category..."
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
+            className="search-input"
           />
         </div>
 
-        <div className="category-filter">
+        <div className="category-container">
           <select 
             value={selectedCategory} 
             onChange={e => setSelectedCategory(e.target.value)}
+            className="category-select"
           >
             {categories.map(cat => (
               <option key={cat} value={cat}>{cat}</option>
@@ -434,87 +440,95 @@ function Schemes() {
         </div>
       </div>
 
+      {/* Stats Section */}
       <div className="schemes-stats">
-        <p>Showing {filtered.length} of {schemes.length} schemes</p>
+        <span className="stats-text">Showing {filtered.length} of {schemes.length} schemes</span>
       </div>
 
-      <div className="grid-container">
-        {filtered.map((s, i) => (
-          <div className="scheme-card" key={i}>
+      {/* Cards Grid */}
+      <div className="schemes-grid">
+        {filtered.map((scheme, index) => (
+          <div className="scheme-card" key={index}>
             <div
               className="scheme-image"
-              style={{ backgroundImage: `url(${s.image || '/assets/schemes/default.jpg'})` }}
-              onClick={() => toggle(i)}
+              style={{ 
+                backgroundImage: `linear-gradient(135deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 100%), url(${scheme.image || '/assets/schemes/default.jpg'})` 
+              }}
+              onClick={() => toggle(index)}
             >
-              <div className="scheme-category">{s.category}</div>
+              <div className="scheme-category-badge">{scheme.category}</div>
+              <div className="expand-indicator">
+                {expandedIndex === index ? '−' : '+'}
+              </div>
             </div>
             
             <div className="scheme-content">
-              <div className="scheme-name" onClick={() => toggle(i)}>
-                {s.name}
-              </div>
+              <h3 className="scheme-title" onClick={() => toggle(index)}>
+                {scheme.name}
+              </h3>
 
-              {expandedIndex === i && (
+              {expandedIndex === index && (
                 <div className="scheme-details">
-                  {s.details?.launch && (
-                    <div className="detail-item">
-                      <strong>Launch Year:</strong> {s.details.launch}
+                  {scheme.details?.launch && (
+                    <div className="detail-row">
+                      <span className="detail-label">Launch Year:</span>
+                      <span className="detail-value">{scheme.details.launch}</span>
                     </div>
                   )}
-                  {s.details?.objective && (
-                    <div className="detail-item">
-                      <strong>Objective:</strong> {s.details.objective}
+                  {scheme.details?.objective && (
+                    <div className="detail-row">
+                      <span className="detail-label">Objective:</span>
+                      <span className="detail-value">{scheme.details.objective}</span>
                     </div>
                   )}
-                  {s.details?.benefit && (
-                    <div className="detail-item">
-                      <strong>Benefit:</strong> {s.details.benefit}
+                  {scheme.details?.benefit && (
+                    <div className="detail-row">
+                      <span className="detail-label">Benefit:</span>
+                      <span className="detail-value">{scheme.details.benefit}</span>
                     </div>
                   )}
-                  {s.details?.eligibility && (
-                    <div className="detail-item">
-                      <strong>Eligibility:</strong> {s.details.eligibility}
+                  {scheme.details?.eligibility && (
+                    <div className="detail-row">
+                      <span className="detail-label">Eligibility:</span>
+                      <span className="detail-value">{scheme.details.eligibility}</span>
                     </div>
                   )}
-                  {s.details?.apply && (
-                    <div className="detail-item">
-                      <strong>How to Apply:</strong> {s.details.apply}
+                  {scheme.details?.apply && (
+                    <div className="detail-row">
+                      <span className="detail-label">How to Apply:</span>
+                      <span className="detail-value">{scheme.details.apply}</span>
                     </div>
                   )}
-                  {s.details?.documents && (
-                    <div className="detail-item">
-                      <strong>Required Documents:</strong> {s.details.documents}
+                  {scheme.details?.documents && (
+                    <div className="detail-row">
+                      <span className="detail-label">Required Documents:</span>
+                      <span className="detail-value">{scheme.details.documents}</span>
                     </div>
                   )}
-                  {s.details?.applicationMode && (
-                    <div className="detail-item">
-                      <strong>Application Mode:</strong> {s.details.applicationMode}
-                    </div>
-                  )}
-                  {s.details?.website && (
-                    <div className="detail-item">
-                      <strong>Official Website:</strong>{' '}
-                      <a href={s.details.website} target="_blank" rel="noopener noreferrer">
-                        Visit Website
-                      </a>
+                  {scheme.details?.applicationMode && (
+                    <div className="detail-row">
+                      <span className="detail-label">Application Mode:</span>
+                      <span className="detail-value mode-badge">{scheme.details.applicationMode}</span>
                     </div>
                   )}
                   
                   <div className="scheme-actions">
                     <button
-                      className="go-button"
-                      onClick={() => searchGoogle(s.name)}
+                      className="action-btn search-btn"
+                      onClick={() => searchGoogle(scheme.name)}
                     >
-                      🔍 Search Online
+                      <span className="btn-icon">🔍</span>
+                      Search Online
                     </button>
-                    {s.details?.website && (
+                    {scheme.details?.website && (
                       <a 
-                        href={s.details.website} 
+                        href={scheme.details.website} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="website-button"
+                        className="action-btn website-btn"
                       >
-                        🌐 Official Site
+                        <span className="btn-icon">🌐</span>
+                        Official Site
                       </a>
                     )}
                   </div>
@@ -525,8 +539,10 @@ function Schemes() {
         ))}
       </div>
 
+      {/* No Results */}
       {filtered.length === 0 && (
         <div className="no-results">
+          <div className="no-results-icon">📭</div>
           <h3>No schemes found</h3>
           <p>Try adjusting your search terms or category filter.</p>
         </div>
