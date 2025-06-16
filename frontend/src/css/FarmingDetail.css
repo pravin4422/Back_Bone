@@ -1,0 +1,50 @@
+.farming-detail-container {
+  padding: 2rem;
+  background-color: #f4f9f6;
+  min-height: 100vh;
+}
+
+.farming-title {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #2e7d32;
+  margin-bottom: 1rem;
+}
+
+.farming-description {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #4e4e4e;
+  max-width: 700px;
+  margin: 0 auto 2rem;
+}
+
+.farming-topics {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.topic-card {
+  background-color: #ffffff;
+  padding: 1.2rem;
+  border-radius: 10px;
+  border: 1px solid #cde7d8;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: 0.3s ease;
+}
+
+.topic-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.topic-card h2 {
+  color: #2e7d32;
+  margin-bottom: 0.5rem;
+}
+
+.topic-card p {
+  font-size: 0.95rem;
+  color: #555;
+}

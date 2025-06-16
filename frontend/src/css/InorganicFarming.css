@@ -1,0 +1,56 @@
+.inorganic-container {
+  padding: 2rem;
+  background-color: #fffaf6;
+  min-height: 100vh;
+}
+
+.inorganic-title {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #b23b3b;
+  margin-bottom: 1rem;
+}
+
+.inorganic-description {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #555;
+  max-width: 750px;
+  margin: 0 auto 2rem;
+}
+
+.inorganic-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.inorganic-card {
+  background-color: #ffffff;
+  border: 1px solid #ffd6d6;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(255, 0, 0, 0.05);
+  transition: all 0.3s ease-in-out;
+}
+
+.inorganic-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(255, 0, 0, 0.1);
+}
+
+.inorganic-card h2 {
+  color: #b23b3b;
+  margin-bottom: 0.5rem;
+}
+
+.inorganic-card p,
+.inorganic-card ul {
+  color: #444;
+  font-size: 1rem;
+}
+
+.inorganic-card ul {
+  padding-left: 1.2rem;
+  list-style-type: disc;
+}

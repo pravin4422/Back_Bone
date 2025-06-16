@@ -1,0 +1,56 @@
+.infectors-container {
+  padding: 2rem;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+.infectors-title {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #5d4037;
+  margin-bottom: 1rem;
+}
+
+.infectors-description {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #555;
+  max-width: 750px;
+  margin: 0 auto 2rem;
+}
+
+.infectors-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.infectors-card {
+  background-color: #ffffff;
+  border: 1px solid #d7ccc8;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(93, 64, 55, 0.05);
+  transition: all 0.3s ease-in-out;
+}
+
+.infectors-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(93, 64, 55, 0.1);
+}
+
+.infectors-card h2 {
+  color: #5d4037;
+  margin-bottom: 0.5rem;
+}
+
+.infectors-card p,
+.infectors-card ul {
+  color: #444;
+  font-size: 1rem;
+}
+
+.infectors-card ul {
+  padding-left: 1.2rem;
+  list-style-type: disc;
+}

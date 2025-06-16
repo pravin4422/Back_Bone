@@ -15,29 +15,36 @@ import ForgotPassword from './pages/ForgotPassword';
 import CompleteProfile from './pages/CompleteProfile';
 import EditProfile from './pages/EditProfile';
 
+// ✅ New public pages
+import FarmingDetail from './pages/FarmingDetail';
+import AgroChemical from './pages/AgroChemical';
+import AgroInfectors from './pages/AgroInfectors';
+import OrganicFarming from './pages/OrganicFarming';
+import InorganicFarming from './pages/InorganicFarming';
+import FarmingStructure from './pages/FarmingStructure';
+import Others from './pages/Others';
+
 function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-  const token = localStorage.getItem('token');
-  const displayName = localStorage.getItem('displayName');
-  const email = localStorage.getItem('userEmail');
+    const token = localStorage.getItem('token');
+    const displayName = localStorage.getItem('displayName');
+    const email = localStorage.getItem('userEmail');
 
-  if (token && displayName && email) {
-    setUser({
-      displayName,
-      email,
-      phone: localStorage.getItem('phone'),
-      photoURL: localStorage.getItem('photoURL'),
-    });
-  } else if (token) {
-    // fallback: assume user is logged in, even if details are missing
-    setUser(true); // important: makes user truthy so <PrivateRoute> doesn't block
-  } else {
-    setUser(null);
-  }
-}, []);
-
+    if (token && displayName && email) {
+      setUser({
+        displayName,
+        email,
+        phone: localStorage.getItem('phone'),
+        photoURL: localStorage.getItem('photoURL'),
+      });
+    } else if (token) {
+      setUser(true); // fallback if user details are not set
+    } else {
+      setUser(null);
+    }
+  }, []);
 
   return (
     <Router>
@@ -49,6 +56,15 @@ function App() {
         <Route path="/signup" element={<Signup setUser={setUser} />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/complete-profile" element={<CompleteProfile />} />
+
+        {/* ✅ Newly added Public Routes */}
+        <Route path="/farming_detail" element={<FarmingDetail />} />
+        <Route path="/agro_chemical" element={<AgroChemical />} />
+        <Route path="/agro_infectors" element={<AgroInfectors />} />
+        <Route path="/organic_farming" element={<OrganicFarming />} />
+        <Route path="/inorganic_farming" element={<InorganicFarming />} />
+        <Route path="/farming_structure" element={<FarmingStructure />} />
+        <Route path="/others" element={<Others />} />
 
         {/* Protected Routes */}
         <Route

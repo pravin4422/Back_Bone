@@ -78,6 +78,10 @@ function Header({ user, setUser }) {
       </div>
 
       <div className="nav-links">
+        {/* Common navigation links visible to all users */}
+        <Link to="/" className="nav-link">🏠 Home</Link>
+        <Link to="/about" className="nav-link">ℹ️ About Us</Link>
+        
         {!user ? (
           <>
             <Link to="/login" className="nav-link">Login</Link>
