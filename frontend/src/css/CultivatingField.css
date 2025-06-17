@@ -1,0 +1,119 @@
+.cultivating-container {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #fdfdfd;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1, h2, h3, h4 {
+  color: #2e7d32;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+.form-section input,
+.form-section textarea,
+.form-section select {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.form-section textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+button {
+  padding: 8px 16px;
+  margin-top: 8px;
+  margin-right: 8px;
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #388e3c;
+}
+
+.segment-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.segment-row select,
+.segment-row input {
+  flex: 1;
+}
+
+.activity-list {
+  margin-top: 20px;
+}
+
+.activity-card {
+  background: #f1f8e9;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+}
+
+.activity-card h3 {
+  color: #33691e;
+  margin-bottom: 5px;
+}
+
+.activity-card p {
+  margin: 4px 0;
+}
+
+.btn-group {
+  margin-top: 10px;
+}
+
+.btn-group button {
+  background-color: #1976d2;
+}
+
+.btn-group button:hover {
+  background-color: #0d47a1;
+}
+
+.btn-group button:nth-child(2) {
+  background-color: #d32f2f;
+}
+
+.btn-group button:nth-child(2):hover {
+  background-color: #b71c1c;
+}
+
+@media (max-width: 600px) {
+  .segment-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-group button {
+    width: 100%;
+    margin-top: 6px;
+  }
+}
+.export-controls {
+  margin: 20px 0;
+  display: flex;
+  gap: 10px;
+}

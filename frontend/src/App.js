@@ -22,6 +22,10 @@ import EditProfile from './pages/EditProfile';
 
 // Detail pages
 import CreaterDetail from './pages/CreaterDetail';
+import Tractor from './pages/Tractor'; // add this at the top
+import AgromedicalProducts from './pages/AgromedicalProducts';
+import CultivatingField from './pages/CultivatingField';
+
 
 // Farming-related pages
 import FarmingDetail from './pages/FarmingDetail';
@@ -228,6 +232,10 @@ function App() {
                 <Route path="/others" element={<Others />} />
                 {/* Legacy Routes */}
                 <Route path="/creater_detail" element={<CreaterDetail />} />
+                <Route path="/Tractor" element={<Tractor />} />
+                <Route path="/AgromedicalProducts" element={<AgromedicalProducts />} />
+                <Route path="/CultivatingField" element={<CultivatingField />} />
+
                 <Route path="/FarmingDetail" element={<FarmingDetail />} />
                 <Route path="/AgroChemical" element={<AgroChemical />} />
                 <Route path="/agro_infectors" element={<AgroInfectors />} />

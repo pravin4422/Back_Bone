@@ -1,0 +1,174 @@
+.creator-detail-container {
+  max-width: 960px;
+  margin: auto;
+  padding: 20px;
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.top-bar h1 {
+  font-size: 28px;
+  color: #2c3e50;
+}
+
+.top-actions button {
+  margin-left: 10px;
+  padding: 8px 12px;
+  border: none;
+  background-color: #3498db;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.top-actions button:hover {
+  background-color: #2980b9;
+}
+
+.add-button {
+  background-color: #2ecc71;
+  color: white;
+  padding: 10px 14px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.add-button:hover {
+  background-color: #27ae60;
+}
+
+.entry-form {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  background-color: #f9f9f9;
+}
+
+.entry-form h2,
+.entry-form h4 {
+  margin-bottom: 12px;
+  color: #34495e;
+}
+
+.entry-form label {
+  display: block;
+  margin: 8px 0 4px;
+  font-weight: 500;
+}
+
+.entry-form input,
+.entry-form select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.entry-form button {
+  background-color: #1abc9c;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.entry-form button:hover {
+  background-color: #16a085;
+}
+
+.seeding-takers-list,
+.worker-list {
+  margin-top: 10px;
+}
+
+.taker-card {
+  background-color: #ecf0f1;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.seeding-summary,
+.planting-summary {
+  background-color: #fff9c4;
+  padding: 10px;
+  border: 1px solid #f1c40f;
+  border-radius: 6px;
+  margin-top: 12px;
+}
+
+.entry-list {
+  margin-top: 30px;
+}
+
+.entry-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.entry-card p {
+  margin: 4px 0;
+}
+
+.entry-actions {
+  margin-top: 10px;
+}
+
+.entry-actions button {
+  margin-right: 10px;
+  padding: 6px 10px;
+  font-size: 14px;
+  background-color: #95a5a6;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.entry-actions button:hover {
+  background-color: #7f8c8d;
+}
+
+.planting-section {
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px dashed #ccc;
+}
+
+@media print {
+  .add-button,
+  .top-actions,
+  .entry-actions,
+  .entry-form button {
+    display: none !important;
+  }
+
+  .entry-form {
+    border: none;
+    background-color: white;
+  }
+
+  .entry-card {
+    box-shadow: none;
+  }
+}
