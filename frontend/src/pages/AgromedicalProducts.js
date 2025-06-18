@@ -13,6 +13,52 @@ function AgromedicalProducts() {
   const [cost, setCost] = useState('');
   const [editingIndex, setEditingIndex] = useState(null);
   const [filterMonth, setFilterMonth] = useState('');
+  const [language, setLanguage] = useState('en');
+
+  const translations = {
+    en: {
+      title: '💊 Agromedical Products',
+      date: 'Date',
+      day: 'Day',
+      name: 'Product Name',
+      quantity: 'Quantity',
+      cost: 'Cost per Unit',
+      total: 'Total',
+      addProduct: 'Add Product',
+      updateProduct: 'Update',
+      filterMonth: 'Filter by Month',
+      exportExcel: '📊 Excel',
+      exportPDF: '📄 PDF',
+      print: '🖨️ Print',
+      totalCost: 'Total Cost',
+      edit: '✏️ Edit',
+      delete: '🗑️ Delete',
+      printedOn: 'Printed on',
+      signature: 'Signature',
+    },
+    ta: {
+      title: '💊 வேளாண் மருத்துவ பொருட்கள்',
+      date: 'தேதி',
+      day: 'நாள்',
+      name: 'பொருளின் பெயர்',
+      quantity: 'அளவு',
+      cost: 'ஒரு பொருளுக்கான செலவு',
+      total: 'மொத்தம்',
+      addProduct: 'பொருள் சேர்க்க',
+      updateProduct: 'புதுப்பி',
+      filterMonth: 'மாதம் மூலம் வடிகட்டு',
+      exportExcel: '📊 எக்செல்',
+      exportPDF: '📄 PDF',
+      print: '🖨️ அச்சிடு',
+      totalCost: 'மொத்த செலவு',
+      edit: '✏️ திருத்து',
+      delete: '🗑️ நீக்கு',
+      printedOn: 'அச்சிடப்பட்ட தேதி',
+      signature: 'கையொப்பம்',
+    },
+  };
+
+  const t = translations[language];
 
   useEffect(() => {
     const saved = localStorage.getItem('agroProducts');
@@ -83,7 +129,7 @@ function AgromedicalProducts() {
 
   const exportToPDF = () => {
     const doc = new jsPDF();
-    doc.text(`Agromedical Products - ${filterMonth || 'All'}`, 14, 15);
+    doc.text(`${t.title} - ${filterMonth || 'All'}`, 14, 15);
     const tableData = filteredProducts.map((p) => [
       p.date,
       p.day,
@@ -93,12 +139,12 @@ function AgromedicalProducts() {
       p.total,
     ]);
     doc.autoTable({
-      head: [['Date', 'Day', 'Product', 'Qty', 'Unit Cost', 'Total']],
+      head: [[t.date, t.day, t.name, t.quantity, t.cost, t.total]],
       body: tableData,
       startY: 20,
     });
-    doc.text(`Printed on: ${new Date().toLocaleDateString()}`, 14, doc.lastAutoTable.finalY + 10);
-    doc.text('Signature: __________________', 14, doc.lastAutoTable.finalY + 20);
+    doc.text(`${t.printedOn}: ${new Date().toLocaleDateString()}`, 14, doc.lastAutoTable.finalY + 10);
+    doc.text(`${t.signature}: __________________`, 14, doc.lastAutoTable.finalY + 20);
     doc.save('AgromedicalProducts.pdf');
   };
 
@@ -108,7 +154,7 @@ function AgromedicalProducts() {
     printWindow.document.write(`
       <html>
         <head>
-          <title>Print - Agromedical Products</title>
+          <title>Print - ${t.title}</title>
           <style>
             body { font-family: Arial, sans-serif; padding: 20px; }
             h2 { text-align: center; margin: 0; }
@@ -119,11 +165,11 @@ function AgromedicalProducts() {
           </style>
         </head>
         <body>
-          <h2>Agromedical Products - ${filterMonth || 'All Months'}</h2>
+          <h2>${t.title} - ${filterMonth || 'All Months'}</h2>
           ${printContent.innerHTML}
           <div class="footer">
-            Printed on: ${new Date().toLocaleDateString()}<br/>
-            Signature: ________________________
+            ${t.printedOn}: ${new Date().toLocaleDateString()}<br/>
+            ${t.signature}: ________________________
           </div>
         </body>
       </html>
@@ -135,7 +181,7 @@ function AgromedicalProducts() {
 
   const filteredProducts = products.filter((p) => {
     if (!filterMonth) return true;
-    const month = p.date?.slice(0, 7); // "YYYY-MM"
+    const month = p.date?.slice(0, 7);
     return month === filterMonth;
   });
 
@@ -143,7 +189,13 @@ function AgromedicalProducts() {
 
   return (
     <div className="agromedical-container">
-      <h1>💊 Agromedical Products</h1>
+      <div style={{ textAlign: 'right', marginBottom: '10px' }}>
+        <button onClick={() => setLanguage(language === 'en' ? 'ta' : 'en')}>
+          🌐 {language === 'en' ? 'தமிழ்' : 'English'}
+        </button>
+      </div>
+
+      <h1>{t.title}</h1>
 
       <div className="form-section">
         <input
@@ -156,52 +208,32 @@ function AgromedicalProducts() {
             setDay(dayName);
           }}
         />
-        <input type="text" placeholder="Day" value={day} readOnly />
-        <input
-          type="text"
-          placeholder="Product Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Quantity"
-          value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Cost per Unit"
-          value={cost}
-          onChange={(e) => setCost(e.target.value)}
-        />
+        <input type="text" placeholder={t.day} value={day} readOnly />
+        <input type="text" placeholder={t.name} value={name} onChange={(e) => setName(e.target.value)} />
+        <input type="number" placeholder={t.quantity} value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+        <input type="number" placeholder={t.cost} value={cost} onChange={(e) => setCost(e.target.value)} />
         <button onClick={addProduct}>
-          {editingIndex !== null ? 'Update' : 'Add Product'}
+          {editingIndex !== null ? t.updateProduct : t.addProduct}
         </button>
       </div>
 
       <div className="filter-bar">
-        <input
-          type="month"
-          value={filterMonth}
-          onChange={(e) => setFilterMonth(e.target.value)}
-        />
-        <button onClick={exportToExcel}>📊 Excel</button>
-        <button onClick={exportToPDF}>📄 PDF</button>
-        <button onClick={handlePrint}>🖨️ Print</button>
+        <input type="month" value={filterMonth} onChange={(e) => setFilterMonth(e.target.value)} />
+        <button onClick={exportToExcel}>{t.exportExcel}</button>
+        <button onClick={exportToPDF}>{t.exportPDF}</button>
+        <button onClick={handlePrint}>{t.print}</button>
       </div>
 
-      {/* Printable section */}
       <div id="print-section">
         <table>
           <thead>
             <tr>
-              <th>Date</th>
-              <th>Day</th>
-              <th>Product</th>
-              <th>Quantity</th>
-              <th>Cost/unit</th>
-              <th>Total</th>
+              <th>{t.date}</th>
+              <th>{t.day}</th>
+              <th>{t.name}</th>
+              <th>{t.quantity}</th>
+              <th>{t.cost}</th>
+              <th>{t.total}</th>
             </tr>
           </thead>
           <tbody>
@@ -222,22 +254,22 @@ function AgromedicalProducts() {
       <div className="agromedical-grid">
         {filteredProducts.map((item, index) => (
           <div key={index} className="product-card">
-            <p><strong>Date:</strong> {item.date}</p>
-            <p><strong>Day:</strong> {item.day}</p>
-            <p><strong>Product:</strong> {item.name}</p>
-            <p><strong>Quantity:</strong> {item.quantity}</p>
-            <p><strong>Cost/unit:</strong> ₹{item.cost}</p>
-            <p><strong>Total:</strong> ₹{item.total}</p>
+            <p><strong>{t.date}:</strong> {item.date}</p>
+            <p><strong>{t.day}:</strong> {item.day}</p>
+            <p><strong>{t.name}:</strong> {item.name}</p>
+            <p><strong>{t.quantity}:</strong> {item.quantity}</p>
+            <p><strong>{t.cost}:</strong> ₹{item.cost}</p>
+            <p><strong>{t.total}:</strong> ₹{item.total}</p>
             <div className="actions">
-              <button onClick={() => editProduct(index)}>✏️ Edit</button>
-              <button onClick={() => deleteProduct(index)}>🗑️ Delete</button>
+              <button onClick={() => editProduct(index)}>{t.edit}</button>
+              <button onClick={() => deleteProduct(index)}>{t.delete}</button>
             </div>
           </div>
         ))}
       </div>
 
       <div className="total-section">
-        <h2>Total Cost: ₹{totalCost.toFixed(2)}</h2>
+        <h2>{t.totalCost}: ₹{totalCost.toFixed(2)}</h2>
       </div>
     </div>
   );

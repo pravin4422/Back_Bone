@@ -5,6 +5,9 @@ import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 
 function CultivatingField() {
+  const [language, setLanguage] = useState('en');
+  const t = (en, ta) => (language === 'ta' ? ta : en);
+
   const [activities, setActivities] = useState([]);
   const [title, setTitle] = useState('');
   const [note, setNote] = useState('');
@@ -48,7 +51,7 @@ function CultivatingField() {
 
   const handleAddActivity = () => {
     if (!title || !note || !date || !rate || timeSegments.some(seg => !seg.hours)) {
-      alert('Please fill in all required fields');
+      alert(t('Please fill in all required fields', 'தயவு செய்து அனைத்து புலங்களையும் நிரப்பவும்'));
       return;
     }
 
@@ -186,43 +189,49 @@ function CultivatingField() {
 
   return (
     <div className="cultivating-container">
-      <h1>📋 Cultivating Field - Activity Log</h1>
+      <div style={{ textAlign: 'right' }}>
+        <button onClick={() => setLanguage(language === 'en' ? 'ta' : 'en')}>
+          🌐 {language === 'en' ? 'தமிழில்' : 'In English'}
+        </button>
+      </div>
+
+      <h1>{t('📋 Cultivating Field - Activity Log', '📋 விவசாய செயல் பதிவேடு')}</h1>
 
       <div className="form-section">
-        <input type="text" placeholder="Activity Title" value={title} onChange={e => setTitle(e.target.value)} />
-        <textarea placeholder="Activity Notes" value={note} onChange={e => setNote(e.target.value)} />
+        <input type="text" placeholder={t("Activity Title", "செயலின் தலைப்பு")} value={title} onChange={e => setTitle(e.target.value)} />
+        <textarea placeholder={t("Activity Notes", "செயலுக்கான குறிப்புகள்")} value={note} onChange={e => setNote(e.target.value)} />
         <input type="date" value={date} onChange={e => setDate(e.target.value)} />
-        <input type="text" placeholder="Driver Name" value={driver} onChange={e => setDriver(e.target.value)} />
-        <input type="text" placeholder="Owner Name" value={ownerName} onChange={e => setOwnerName(e.target.value)} />
-        <input type="text" placeholder="Owner Address" value={ownerAddress} onChange={e => setOwnerAddress(e.target.value)} />
-        <input type="text" placeholder="Owner Phone 1" value={ownerPhone1} onChange={e => setOwnerPhone1(e.target.value)} />
-        <input type="text" placeholder="Owner Phone 2" value={ownerPhone2} onChange={e => setOwnerPhone2(e.target.value)} />
+        <input type="text" placeholder={t("Driver Name", "டிரைவர் பெயர்")} value={driver} onChange={e => setDriver(e.target.value)} />
+        <input type="text" placeholder={t("Owner Name", "உரிமையாளர் பெயர்")} value={ownerName} onChange={e => setOwnerName(e.target.value)} />
+        <input type="text" placeholder={t("Owner Address", "முகவரி")} value={ownerAddress} onChange={e => setOwnerAddress(e.target.value)} />
+        <input type="text" placeholder={t("Owner Phone 1", "தொலைபேசி எண் 1")} value={ownerPhone1} onChange={e => setOwnerPhone1(e.target.value)} />
+        <input type="text" placeholder={t("Owner Phone 2", "தொலைபேசி எண் 2")} value={ownerPhone2} onChange={e => setOwnerPhone2(e.target.value)} />
 
-        <label>Time Segments:</label>
+        <label>{t("Time Segments", "நேர பகுதிகள்")}:</label>
         {timeSegments.map((seg, idx) => (
           <div key={idx} className="segment-row">
             <select value={seg.period} onChange={e => handleSegmentChange(idx, 'period', e.target.value)}>
-              <option>Morning</option>
-              <option>Afternoon</option>
-              <option>Evening</option>
-              <option>Night</option>
+              <option value="Morning">{t("Morning", "காலை")}</option>
+              <option value="Afternoon">{t("Afternoon", "மதியம்")}</option>
+              <option value="Evening">{t("Evening", "மாலை")}</option>
+              <option value="Night">{t("Night", "இரவு")}</option>
             </select>
-            <input type="number" placeholder="Hours" value={seg.hours} onChange={e => handleSegmentChange(idx, 'hours', e.target.value)} />
+            <input type="number" placeholder={t("Hours", "மணிநேரம்")} value={seg.hours} onChange={e => handleSegmentChange(idx, 'hours', e.target.value)} />
             {idx > 0 && <button onClick={() => removeTimeSegment(idx)}>➖</button>}
           </div>
         ))}
-        <button onClick={addTimeSegment}>➕ Add Time Slot</button>
+        <button onClick={addTimeSegment}>➕ {t("Add Time Slot", "நேர இடைவெளியை சேர்")}</button>
 
-        <input type="number" placeholder="Price per hour" value={rate} onChange={e => setRate(e.target.value)} />
-        <button onClick={handleAddActivity}>{editingIndex !== null ? 'Update Activity' : 'Add Activity'}</button>
+        <input type="number" placeholder={t("Price per hour", "மணிக்கு விலை")} value={rate} onChange={e => setRate(e.target.value)} />
+        <button onClick={handleAddActivity}>{editingIndex !== null ? t("Update Activity", "செயலை புதுப்பி") : t("Add Activity", "செயலை சேர்")}</button>
       </div>
 
       <div className="actions">
-        <input type="text" placeholder="Search..." value={search} onChange={e => setSearch(e.target.value)} />
-        <button onClick={handleExportCSV}>Export CSV</button>
-        <button onClick={handleExportExcel}>Export Excel</button>
-        <button onClick={handleExportPDF}>Export PDF</button>
-        <button onClick={handlePrint}>🖨️ Print</button>
+        <input type="text" placeholder={t("Search...", "தேடு...")} value={search} onChange={e => setSearch(e.target.value)} />
+        <button onClick={handleExportCSV}>{t("Export CSV", "CSV ஏற்றுமதி")}</button>
+        <button onClick={handleExportExcel}>{t("Export Excel", "Excel ஏற்றுமதி")}</button>
+        <button onClick={handleExportPDF}>{t("Export PDF", "PDF ஏற்றுமதி")}</button>
+        <button onClick={handlePrint}>🖨️ {t("Print", "அச்சிடு")}</button>
       </div>
 
       <div className="activity-list">
@@ -230,13 +239,13 @@ function CultivatingField() {
           <div key={index} className="activity-card">
             <h3>{item.title} ({item.date})</h3>
             <p>{item.note}</p>
-            <p>👷 Driver: {item.driver}</p>
-            <p>👤 Owner: {item.owner.name} | 📞 {item.owner.phone1}, {item.owner.phone2}</p>
-            <p>📍 Address: {item.owner.address}</p>
-            <p>⏱️ Time: {item.timeSegments.map(s => `${s.period}: ${s.hours}h`).join(', ')}</p>
-            <p>💰 Hours: {item.totalHours} | Rate: ₹{item.rate} | Total: ₹{item.total}</p>
-            <button onClick={() => handleEdit(index)}>✏️ Edit</button>
-            <button onClick={() => handleDelete(index)}>🗑 Delete</button>
+            <p>👷 {t("Driver", "டிரைவர்")}: {item.driver}</p>
+            <p>👤 {t("Owner", "உரிமையாளர்")}: {item.owner.name} | 📞 {item.owner.phone1}, {item.owner.phone2}</p>
+            <p>📍 {t("Address", "முகவரி")}: {item.owner.address}</p>
+            <p>⏱️ {t("Time", "நேரம்")}: {item.timeSegments.map(s => `${t(s.period, translatePeriod(s.period))}: ${s.hours}h`).join(', ')}</p>
+            <p>💰 {t("Hours", "மணிநேரம்")}: {item.totalHours} | {t("Rate", "விலை")}: ₹{item.rate} | {t("Total", "மொத்தம்")}: ₹{item.total}</p>
+            <button onClick={() => handleEdit(index)}>✏️ {t("Edit", "தொகு")}</button>
+            <button onClick={() => handleDelete(index)}>🗑 {t("Delete", "நீக்கு")}</button>
           </div>
         ))}
       </div>
@@ -252,6 +261,16 @@ function CultivatingField() {
       )}
     </div>
   );
+
+  function translatePeriod(period) {
+    switch (period) {
+      case 'Morning': return 'காலை';
+      case 'Afternoon': return 'மதியம்';
+      case 'Evening': return 'மாலை';
+      case 'Night': return 'இரவு';
+      default: return period;
+    }
+  }
 }
 
 export default CultivatingField;

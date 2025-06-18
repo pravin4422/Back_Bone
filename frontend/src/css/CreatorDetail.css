@@ -1,174 +1,403 @@
+/* CreatorDetail.css */
+
 .creator-detail-container {
-  max-width: 960px;
-  margin: auto;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
-  font-family: 'Segoe UI', sans-serif;
-  color: #333;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  min-height: 100vh;
 }
 
+/* Top Bar Styles */
 .top-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  padding: 20px 30px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
 }
 
 .top-bar h1 {
-  font-size: 28px;
-  color: #2c3e50;
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.top-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .top-actions button {
-  margin-left: 10px;
-  padding: 8px 12px;
-  border: none;
-  background-color: #3498db;
+  background: rgba(255, 255, 255, 0.2);
   color: white;
-  border-radius: 6px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 500;
   cursor: pointer;
-  font-size: 14px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
 }
 
 .top-actions button:hover {
-  background-color: #2980b9;
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
 }
 
+/* Add Button */
 .add-button {
-  background-color: #2ecc71;
+  background: linear-gradient(135deg, #2196F3, #1976D2);
   color: white;
-  padding: 10px 14px;
-  margin: 10px 0;
   border: none;
-  border-radius: 6px;
+  padding: 15px 30px;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 16px;
+  margin-bottom: 30px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
 }
 
 .add-button:hover {
-  background-color: #27ae60;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
 }
 
+/* Entry Form Styles */
 .entry-form {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 20px;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
   margin-bottom: 30px;
-  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
 }
 
-.entry-form h2,
+.entry-form h2 {
+  color: #2c3e50;
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+  border-bottom: 3px solid #4CAF50;
+  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .entry-form h4 {
-  margin-bottom: 12px;
   color: #34495e;
+  margin: 25px 0 15px 0;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .entry-form label {
   display: block;
-  margin: 8px 0 4px;
-  font-weight: 500;
+  margin: 15px 0 5px 0;
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 0.95rem;
 }
 
 .entry-form input,
 .entry-form select {
   width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  margin-bottom: 10px;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.entry-form input:focus,
+.entry-form select:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
 }
 
 .entry-form button {
-  background-color: #1abc9c;
+  background: linear-gradient(135deg, #4CAF50, #45a049);
   color: white;
-  padding: 8px 14px;
   border: none;
-  border-radius: 6px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
   cursor: pointer;
-  margin-top: 10px;
+  margin: 15px 10px 15px 0;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
 }
 
 .entry-form button:hover {
-  background-color: #16a085;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
 }
 
-.seeding-takers-list,
-.worker-list {
-  margin-top: 10px;
-}
-
-.taker-card {
-  background-color: #ecf0f1;
-  padding: 10px;
-  border-radius: 6px;
-  margin-bottom: 8px;
-  font-size: 15px;
-}
-
-.seeding-summary,
-.planting-summary {
-  background-color: #fff9c4;
-  padding: 10px;
-  border: 1px solid #f1c40f;
-  border-radius: 6px;
-  margin-top: 12px;
-}
-
-.entry-list {
-  margin-top: 30px;
-}
-
-.entry-card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 20px;
-  background-color: #fff;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-}
-
-.entry-card p {
-  margin: 4px 0;
-}
-
-.entry-actions {
-  margin-top: 10px;
-}
-
-.entry-actions button {
-  margin-right: 10px;
-  padding: 6px 10px;
-  font-size: 14px;
-  background-color: #95a5a6;
-  border: none;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.entry-actions button:hover {
-  background-color: #7f8c8d;
+/* Special Sections */
+.taking-seeding-inline {
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 10px;
+  margin: 25px 0;
+  border-left: 4px solid #FF9800;
 }
 
 .planting-section {
-  margin-top: 20px;
-  padding-top: 10px;
-  border-top: 1px dashed #ccc;
+  background: #f0f8f0;
+  padding: 25px;
+  border-radius: 10px;
+  margin: 25px 0;
+  border-left: 4px solid #4CAF50;
 }
 
-@media print {
-  .add-button,
-  .top-actions,
-  .entry-actions,
-  .entry-form button {
-    display: none !important;
+/* Lists and Cards */
+.seeding-takers-list,
+.worker-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.taker-card {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.taker-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.taker-card p {
+  margin: 8px 0;
+  color: #2c3e50;
+}
+
+.taker-card strong {
+  color: #27ae60;
+}
+
+/* Summary Sections */
+.seeding-summary,
+.planting-summary {
+  background: rgba(76, 175, 80, 0.1);
+  padding: 15px;
+  border-radius: 8px;
+  margin: 15px 0;
+  border-left: 4px solid #4CAF50;
+}
+
+.seeding-summary p,
+.planting-summary p {
+  margin: 8px 0;
+  color: #2c3e50;
+}
+
+/* Entry List */
+.entry-list {
+  margin-top: 40px;
+}
+
+.entry-list h2 {
+  color: #2c3e50;
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.entry-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.3s ease;
+}
+
+.entry-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.entry-card p {
+  margin: 10px 0;
+  color: #2c3e50;
+  font-size: 0.95rem;
+}
+
+.entry-card strong {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+/* Entry Actions */
+.entry-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.entry-actions button {
+  background: linear-gradient(135deg, #6c757d, #5a6268);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  flex: 1;
+}
+
+.entry-actions button:first-child {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+}
+
+.entry-actions button:last-child {
+  background: linear-gradient(135deg, #dc3545, #bd2130);
+}
+
+.entry-actions button:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .creator-detail-container {
+    padding: 15px;
+  }
+
+  .top-bar {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .top-bar h1 {
+    font-size: 1.5rem;
+  }
+
+  .top-actions {
+    justify-content: center;
   }
 
   .entry-form {
-    border: none;
-    background-color: white;
+    padding: 20px;
+  }
+
+  .taking-seeding-inline,
+  .planting-section {
+    padding: 15px;
+  }
+
+  .seeding-takers-list,
+  .worker-list {
+    grid-template-columns: 1fr;
+  }
+
+  .entry-actions {
+    flex-direction: column;
+  }
+
+  .entry-actions button {
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .top-actions button {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+
+  .add-button {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .entry-form h2 {
+    font-size: 1.4rem;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .creator-detail-container {
+    background: white;
+    box-shadow: none;
+  }
+
+  .top-actions,
+  .add-button,
+  .entry-actions {
+    display: none;
+  }
+
+  .entry-form {
+    box-shadow: none;
+    border: 1px solid #ccc;
   }
 
   .entry-card {
     box-shadow: none;
+    border: 1px solid #ccc;
+    page-break-inside: avoid;
   }
+
+  .top-bar {
+    background: #4CAF50 !important;
+    -webkit-print-color-adjust: exact;
+  }
+}
+
+/* Animation for smooth transitions */
+* {
+  transition: all 0.3s ease;
+}
+
+/* Utility classes */
+.text-center {
+  text-align: center;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.mt-20 {
+  margin-top: 20px;
 }
