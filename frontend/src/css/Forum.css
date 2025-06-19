@@ -1,0 +1,105 @@
+.forum-container {
+  max-width: 700px;
+  margin: auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.new-post-form input[type="text"],
+.new-post-form textarea,
+.new-post-form select {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  font-size: 1rem;
+}
+
+.new-post-form textarea {
+  resize: vertical;
+  height: 80px;
+}
+
+.new-post-form button {
+  padding: 10px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.image-preview,
+.post-image {
+  max-width: 100%;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.posts-list {
+  margin-top: 30px;
+}
+
+.forum-post {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post-category {
+  background: #4caf50;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 0.9rem;
+}
+
+.post-footer {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: #555;
+}
+
+.comments-section {
+  margin-top: 15px;
+  border-top: 1px solid #ccc;
+  padding-top: 10px;
+}
+
+.forum-comment {
+  border-bottom: 1px solid #eee;
+  padding: 8px 0;
+}
+
+.reply-form textarea {
+  width: 100%;
+  height: 60px;
+  margin-bottom: 8px;
+}
+
+.reply-form button {
+  margin-right: 10px;
+}
+
+.reply-btn,
+.cancel-btn {
+  cursor: pointer;
+  background-color: #4caf50;
+  border: none;
+  padding: 7px 12px;
+  color: white;
+  border-radius: 3px;
+}
+
+.cancel-btn {
+  background-color: #f44336;
+}
+
+.error-text {
+  color: red;
+  font-weight: bold;
+}
