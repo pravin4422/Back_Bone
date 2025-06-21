@@ -1,0 +1,220 @@
+/* Herbicides.css */
+.herbicides-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+  background-color: #f8fdf8;
+  min-height: 100vh;
+}
+
+.herbicides-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+.herbicide-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid #e8f5e8;
+  position: relative;
+}
+
+.herbicide-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  border-color: #4a7c59;
+}
+
+.herbicide-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  background: linear-gradient(45deg, #f0f8f0, #e8f5e8);
+}
+
+.herbicide-card:hover .herbicide-image {
+  transform: scale(1.05);
+}
+
+.herbicide-info {
+  padding: 25px;
+  position: relative;
+}
+
+.herbicide-info h3 {
+  font-size: 1.4rem;
+  color: #2d5016;
+  margin-bottom: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.herbicide-category {
+  display: inline-block;
+  background: linear-gradient(135deg, #4a7c59, #5d8a6b);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(74, 124, 89, 0.3);
+}
+
+.herbicide-info p {
+  color: #555;
+  line-height: 1.6;
+  font-size: 0.95rem;
+  margin: 0;
+  text-align: justify;
+}
+
+.herbicides-footer {
+  text-align: center;
+  padding: 25px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  font-size: 1.1rem;
+  color: #4a7c59;
+  font-weight: 600;
+  border: 2px solid #e8f5e8;
+}
+
+/* Category-specific color variations */
+.herbicide-card:nth-child(8n+1) .herbicide-category {
+  background: linear-gradient(135deg, #dc3545, #e74c5c);
+}
+
+.herbicide-card:nth-child(8n+2) .herbicide-category {
+  background: linear-gradient(135deg, #28a745, #34ce57);
+}
+
+.herbicide-card:nth-child(8n+3) .herbicide-category {
+  background: linear-gradient(135deg, #ffc107, #ffcd39);
+  color: #333;
+}
+
+.herbicide-card:nth-child(8n+4) .herbicide-category {
+  background: linear-gradient(135deg, #17a2b8, #1ac6dd);
+}
+
+.herbicide-card:nth-child(8n+5) .herbicide-category {
+  background: linear-gradient(135deg, #6f42c1, #8e58d6);
+}
+
+.herbicide-card:nth-child(8n+6) .herbicide-category {
+  background: linear-gradient(135deg, #fd7e14, #ff922b);
+}
+
+.herbicide-card:nth-child(8n+7) .herbicide-category {
+  background: linear-gradient(135deg, #20c997, #38d9a9);
+}
+
+.herbicide-card:nth-child(8n+8) .herbicide-category {
+  background: linear-gradient(135deg, #e83e8c, #ed5aa3);
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+  .herbicides-grid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .herbicides-container {
+    padding: 15px;
+  }
+  
+  .herbicides-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .herbicide-info {
+    padding: 20px;
+  }
+  
+  .herbicide-info h3 {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .herbicide-info {
+    padding: 15px;
+  }
+  
+  .herbicide-category {
+    font-size: 0.8rem;
+    padding: 5px 12px;
+  }
+}
+
+/* Animation for loading */
+.herbicide-card {
+  animation: fadeInUp 0.6s ease forwards;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.herbicide-card:nth-child(1) { animation-delay: 0.1s; }
+.herbicide-card:nth-child(2) { animation-delay: 0.2s; }
+.herbicide-card:nth-child(3) { animation-delay: 0.3s; }
+.herbicide-card:nth-child(4) { animation-delay: 0.4s; }
+.herbicide-card:nth-child(5) { animation-delay: 0.5s; }
+.herbicide-card:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hover effects for better interactivity */
+.herbicide-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #4a7c59, #6ba777, #5d8a6b);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.herbicide-card:hover::before {
+  transform: scaleX(1);
+}
+
+/* Scrollbar styling */
+.herbicides-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.herbicides-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.herbicides-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #4a7c59, #6ba777);
+  border-radius: 10px;
+}
+
+.herbicides-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #3d6b4a, #5d9668);
+}

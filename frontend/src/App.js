@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-
+import AgroChemicalCategories from './pages/AgroChemical';
 import Header from './components/Header';
 import PrivateRoute from './components/PrivateRoute';
-// LoadingSpinner component defined inline
 
 // Main pages
 import Home from './pages/Home';
@@ -11,7 +10,7 @@ import Weather from './pages/Weather';
 import Prices from './pages/Prices';
 import Schemes from './pages/Schemes';
 import Forum from './pages/Forum';
-import AboutUs from './pages/AboutUs'; // ✅ Added this line
+import AboutUs from './pages/AboutUs';
 
 // Auth pages
 import Login from './pages/Login';
@@ -22,10 +21,22 @@ import EditProfile from './pages/EditProfile';
 
 // Detail pages
 import CreaterDetail from './pages/CreaterDetail';
-import Tractor from './pages/Tractor'; // add this at the top
+import Tractor from './pages/Tractor';
 import AgromedicalProducts from './pages/AgromedicalProducts';
 import CultivatingField from './pages/CultivatingField';
 
+// Agrochemical detail pages
+import Insecticides from './pages/agromedical/Insecticides';
+import Herbicides from './pages/Herbicides';
+import BiologicalProducts from './pages/agromedical/BiologicalProducts';
+import Fungicides from './pages/agromedical/Fungicides';
+import Adjuvants from './pages/agromedical/Adjuvants';
+import MacroNutrients from './pages/agromedical/MacroNutrients';
+import MicroNutrients from './pages/agromedical/MicroNutrients';
+import SoilConditioners from './pages/agromedical/SoilConditioners';
+import Biostimulants from './pages/agromedical/Biostimulants';
+import WaterSolubleFertilizers from './pages/agromedical/WaterSolubleFertilizers';
+import SeedCoatings from './pages/agromedical/SeedCoatings';
 
 // Farming-related pages
 import FarmingDetail from './pages/FarmingDetail';
@@ -36,28 +47,23 @@ import InorganicFarming from './pages/InorganicFarming';
 import FarmingStructure from './pages/FarmingStructure';
 import Others from './pages/Others';
 
-// Simple loading component
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center min-h-screen">
     <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
   </div>
 );
 
-// Error boundary component
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
     this.state = { hasError: false };
   }
-
   static getDerivedStateFromError(error) {
     return { hasError: true };
   }
-
   componentDidCatch(error, errorInfo) {
     console.error('Error caught by boundary:', error, errorInfo);
   }
-
   render() {
     if (this.state.hasError) {
       return (
@@ -78,7 +84,6 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-// 404 Not Found component
 const NotFound = () => (
   <div className="flex items-center justify-center min-h-screen">
     <div className="text-center">
@@ -121,11 +126,7 @@ function App() {
     } catch (error) {
       console.error('Error initializing user:', error);
       setAuthError('Failed to load user data');
-      localStorage.removeItem('token');
-      localStorage.removeItem('displayName');
-      localStorage.removeItem('userEmail');
-      localStorage.removeItem('phone');
-      localStorage.removeItem('photoURL');
+      localStorage.clear();
       setUser(null);
     } finally {
       setIsLoading(false);
@@ -160,7 +161,7 @@ function App() {
             authError={authError}
             clearAuthError={clearAuthError}
           />
-          
+
           {authError && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mx-4 mt-4">
               <span className="block sm:inline">{authError}</span>
@@ -175,47 +176,13 @@ function App() {
 
           <main className="container mx-auto px-4 py-8">
             <Routes>
-              {/* Public Routes */}
               <Route path="/" element={<Home />} />
-              <Route path="/about" element={<AboutUs />} /> {/* ✅ New About Page Route */}
+              <Route path="/about" element={<AboutUs />} />
+              <Route path="/login" element={user ? <Navigate to="/weather" replace /> : <Login setUser={setUser} onError={handleAuthError} />} />
+              <Route path="/signup" element={user ? <Navigate to="/weather" replace /> : <Signup setUser={setUser} onError={handleAuthError} />} />
+              <Route path="/forgot-password" element={user ? <Navigate to="/weather" replace /> : <ForgotPassword onError={handleAuthError} />} />
+              <Route path="/complete-profile" element={user?.needsProfileCompletion ? <CompleteProfile setUser={setUser} onError={handleAuthError} /> : <Navigate to={user ? "/weather" : "/login"} replace />} />
 
-              {/* Auth Routes */}
-              <Route 
-                path="/login" 
-                element={
-                  user ? 
-                    <Navigate to="/weather" replace /> : 
-                    <Login setUser={setUser} onError={handleAuthError} />
-                } 
-              />
-              <Route 
-                path="/signup" 
-                element={
-                  user ? 
-                    <Navigate to="/weather" replace /> : 
-                    <Signup setUser={setUser} onError={handleAuthError} />
-                } 
-              />
-              <Route 
-                path="/forgot-password" 
-                element={
-                  user ? 
-                    <Navigate to="/weather" replace /> : 
-                    <ForgotPassword onError={handleAuthError} />
-                } 
-              />
-              
-              {/* Profile Completion */}
-              <Route 
-                path="/complete-profile" 
-                element={
-                  user?.needsProfileCompletion ? 
-                    <CompleteProfile setUser={setUser} onError={handleAuthError} /> :
-                    <Navigate to={user ? "/weather" : "/login"} replace />
-                } 
-              />
-
-              {/* Protected Routes */}
               <Route element={<PrivateRoute user={user} />}>
                 <Route path="/weather" element={<Weather />} />
                 <Route path="/prices" element={<Prices />} />
@@ -225,24 +192,33 @@ function App() {
                 <Route path="/create" element={<CreaterDetail />} />
                 <Route path="/farming-details" element={<FarmingDetail />} />
                 <Route path="/agro-chemicals" element={<AgroChemical />} />
+                <Route path="/agrochemical-categories" element={<AgroChemicalCategories />} />
+                <Route path="/agromedical/insecticides" element={<Insecticides />} />
+                <Route path="/agromedical/herbicides" element={<Herbicides />} />
+                <Route path="/agromedical/biological-products" element={<BiologicalProducts />} />
+                <Route path="/agromedical/fungicides" element={<Fungicides />} />
+                <Route path="/agromedical/adjuvants" element={<Adjuvants />} />
+                <Route path="/agromedical/macro-nutrients" element={<MacroNutrients />} />
+                <Route path="/agromedical/micro-nutrients" element={<MicroNutrients />} />
+                <Route path="/agromedical/soil-conditioners" element={<SoilConditioners />} />
+                <Route path="/agromedical/biostimulants" element={<Biostimulants />} />
+                <Route path="/agromedical/water-soluble-fertilizers" element={<WaterSolubleFertilizers />} />
+                <Route path="/agromedical/seed-coatings" element={<SeedCoatings />} />
                 <Route path="/agro-infectors" element={<AgroInfectors />} />
                 <Route path="/organic-farming" element={<OrganicFarming />} />
                 <Route path="/inorganic-farming" element={<InorganicFarming />} />
                 <Route path="/farming-structure" element={<FarmingStructure />} />
                 <Route path="/others" element={<Others />} />
-                {/* Legacy Routes */}
                 <Route path="/creater_detail" element={<CreaterDetail />} />
                 <Route path="/Tractor" element={<Tractor />} />
                 <Route path="/AgromedicalProducts" element={<AgromedicalProducts />} />
                 <Route path="/CultivatingField" element={<CultivatingField />} />
-
                 <Route path="/FarmingDetail" element={<FarmingDetail />} />
                 <Route path="/AgroChemical" element={<AgroChemical />} />
                 <Route path="/agro_infectors" element={<AgroInfectors />} />
                 <Route path="/farming_structure" element={<FarmingStructure />} />
               </Route>
 
-              {/* 404 Fallback */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
