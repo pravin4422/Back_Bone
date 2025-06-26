@@ -58,7 +58,7 @@
   display: flex;
   justify-content: center;
   margin-bottom: 2.5rem;
-  background: var(--card-background);
+  background: #a1cbd8;
   border-radius: var(--border-radius);
   padding: 0.5rem;
   box-shadow: var(--shadow-light);

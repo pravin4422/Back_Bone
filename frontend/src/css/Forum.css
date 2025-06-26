@@ -234,3 +234,41 @@
   color: #555;
   margin-bottom: 8px;
 }
+/* Forum user header */
+.forum-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.forum-user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+  border: 2px solid #ccc;
+}
+
+.forum-user-avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ddd;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.forum-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.forum-meta {
+  font-size: 0.85rem;
+  color: #777;
+}

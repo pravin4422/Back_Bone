@@ -94,8 +94,24 @@ function ForumPost({ post, onDelete, onEditToggle, onUpdate, onLike }) {
         </>
       ) : (
         <>
+          {/* Header with user info and date */}
+          <div className="forum-header">
+            {post.user?.photoURL ? (
+              <img
+                src={post.user.photoURL}
+                alt="User Avatar"
+                className="forum-user-avatar"
+              />
+            ) : (
+              <div className="forum-user-avatar-placeholder">👤</div>
+            )}
+            <div className="forum-user-info">
+              <strong>{post.user?.username || 'Anonymous'}</strong>
+              <div className="forum-meta">📅 {post.createdAt}</div>
+            </div>
+          </div>
+
           <h3>{post.title}</h3>
-          <p className="forum-meta">📅 Posted on: {post.createdAt}</p>
           <p>{post.content}</p>
 
           {/* Files */}
