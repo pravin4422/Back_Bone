@@ -1,234 +1,434 @@
-/* Biological Products Container */
+/* BiologicalProducts.css */
+
+/* Container Styles */
 .biological-products-container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f8faf7;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   min-height: 100vh;
 }
 
-/* Products Grid */
+/* Header Styles */
+.biological-products-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+}
+
+.biological-products-header h1 {
+  font-size: 3rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.biological-products-header p {
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Grid Layout */
 .biological-products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 2rem;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 
-/* Individual Product Card */
-.biological-product-card {
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+/* Product Card Styles */
+.biological-card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
   overflow: hidden;
   transition: all 0.3s ease;
-  border: 1px solid #e5e7eb;
   position: relative;
+  border: 1px solid #e8e8e8;
 }
 
-.biological-product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  border-color: #10b981;
+.biological-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+  border-color: #27ae60;
 }
 
-/* Product Image */
-.biological-product-image {
+.biological-card.clickable {
+  cursor: pointer;
+}
+
+.biological-image {
   width: 100%;
   height: 200px;
   object-fit: cover;
-  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-  border-bottom: 2px solid #f3f4f6;
   transition: transform 0.3s ease;
 }
 
-.biological-product-card:hover .biological-product-image {
+.biological-card:hover .biological-image {
   transform: scale(1.05);
 }
 
-/* Product Info Section */
-.biological-product-info {
+.biological-info {
   padding: 1.5rem;
 }
 
-.biological-product-info h3 {
-  color: #1f2937;
-  font-size: 1.25rem;
+.biological-info h3 {
+  font-size: 1.4rem;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
   font-weight: 600;
-  margin: 0 0 0.75rem 0;
-  line-height: 1.4;
-  transition: color 0.3s ease;
 }
 
-.biological-product-card:hover .biological-product-info h3 {
-  color: #059669;
-}
-
-/* Category Badge */
-.biological-product-category {
+.biological-category {
   display: inline-block;
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.4rem 0.8rem;
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  color: white;
+  padding: 0.3rem 0.8rem;
   border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
   margin-bottom: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+.biological-info p {
+  color: #5a6c7d;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.click-hint {
+  color: #3498db;
+  font-size: 0.85rem;
+  font-weight: 500;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  text-align: center;
+  padding: 0.5rem;
+  background: rgba(52, 152, 219, 0.1);
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.biological-card:hover .click-hint {
+  opacity: 1;
+}
+
+/* Detail View Styles */
+.biological-detail-view {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  overflow: hidden;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.detail-header {
+  background: linear-gradient(135deg, #2c3e50, #3498db);
+  color: white;
+  padding: 2rem;
+  position: relative;
+}
+
+.back-button {
+  background: rgba(255,255,255,0.2);
+  border: 2px solid rgba(255,255,255,0.3);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+  backdrop-filter: blur(10px);
+}
+
+.back-button:hover {
+  background: rgba(255,255,255,0.3);
+  border-color: rgba(255,255,255,0.5);
+  transform: translateX(-5px);
+}
+
+.detail-header h1 {
+  font-size: 2.5rem;
+  margin: 0;
+  font-weight: 700;
+}
+
+.detail-content {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 3rem;
+  padding: 2rem;
+}
+
+.detail-image-section {
+  position: relative;
+}
+
+.detail-image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.category-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+.detail-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.info-card {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border-left: 4px solid #27ae60;
   transition: all 0.3s ease;
 }
 
-/* Category-specific colors */
-.biological-product-category:contains("Bio-Fungicide"),
-.biological-product-card:has(.biological-product-category:contains("Bio-Fungicide")) .biological-product-category {
-  background-color: #ddd6fe;
-  color: #7c3aed;
+.info-card:hover {
+  background: #e8f5e8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(39, 174, 96, 0.1);
 }
 
-.biological-product-category:contains("Bio-Insecticide"),
-.biological-product-card:has(.biological-product-category:contains("Bio-Insecticide")) .biological-product-category {
-  background-color: #fef3c7;
-  color: #d97706;
-}
-
-.biological-product-category:contains("Bio-Nematicide"),
-.biological-product-card:has(.biological-product-category:contains("Bio-Nematicide")) .biological-product-category {
-  background-color: #fecaca;
-  color: #dc2626;
-}
-
-.biological-product-category:contains("Biofertilizer"),
-.biological-product-card:has(.biological-product-category:contains("Biofertilizer")) .biological-product-category {
-  background-color: #d1fae5;
-  color: #059669;
-}
-
-.biological-product-category:contains("Bio-Control"),
-.biological-product-card:has(.biological-product-category:contains("Bio-Control")) .biological-product-category {
-  background-color: #dbeafe;
-  color: #2563eb;
-}
-
-/* Fallback category styling */
-.biological-product-category {
-  background-color: #f3f4f6;
-  color: #6b7280;
-}
-
-/* Product Description */
-.biological-product-info p {
-  color: #6b7280;
-  font-size: 0.9rem;
-  line-height: 1.6;
-  margin: 0;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-}
-
-/* Footer with Results Counter */
-.biological-products-footer {
-  text-align: center;
-  padding: 2rem 0;
+.info-card h3 {
+  color: #2c3e50;
   font-size: 1rem;
-  color: #6b7280;
-  border-top: 1px solid #e5e7eb;
-  margin-top: 2rem;
-  background: #ffffff;
-  border-radius: 8px;
-  font-weight: 500;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-card p {
+  color: #5a6c7d;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.basic-info {
+  background: linear-gradient(135deg, #ecf0f1, #bdc3c7);
+  padding: 2rem;
+  border-radius: 15px;
+  border: 1px solid #d5dbdb;
+}
+
+.basic-info h3 {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.basic-info p {
+  color: #5a6c7d;
+  line-height: 1.6;
+  font-size: 1rem;
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .biological-products-container {
-    padding: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .biological-products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .detail-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .biological-products-header h1 {
+    font-size: 2.2rem;
+  }
+  
+  .biological-products-header p {
+    font-size: 1rem;
+    padding: 0 1rem;
   }
   
   .biological-products-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .biological-card {
+    margin: 0 0.5rem;
+  }
+  
+  .detail-header {
+    padding: 1.5rem;
+  }
+  
+  .detail-header h1 {
+    font-size: 2rem;
+  }
+  
+  .detail-content {
+    padding: 1.5rem;
     gap: 1.5rem;
   }
   
-  .biological-product-card {
-    margin: 0 auto;
-    max-width: 400px;
+  .info-grid {
+    gap: 1rem;
   }
   
-  .biological-product-info {
-    padding: 1.25rem;
+  .info-card {
+    padding: 1rem;
   }
   
-  .biological-product-info h3 {
-    font-size: 1.1rem;
+  .basic-info {
+    padding: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
   .biological-products-container {
-    padding: 0.75rem;
-  }
-  
-  .biological-products-grid {
-    gap: 1rem;
-  }
-  
-  .biological-product-image {
-    height: 160px;
-  }
-  
-  .biological-product-info {
     padding: 1rem;
   }
   
-  .biological-product-info h3 {
-    font-size: 1rem;
+  .biological-products-header h1 {
+    font-size: 1.8rem;
   }
   
-  .biological-product-category {
-    font-size: 0.7rem;
-    padding: 0.3rem 0.6rem;
+  .biological-card {
+    margin: 0;
+  }
+  
+  .biological-info {
+    padding: 1rem;
+  }
+  
+  .detail-header {
+    padding: 1rem;
+  }
+  
+  .detail-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .detail-content {
+    padding: 1rem;
+  }
+  
+  .back-button {
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
   }
 }
 
-/* Loading Animation for Images */
-.biological-product-image {
-  background-image: linear-gradient(90deg, #f0f0f0 25%, transparent 25%), 
-                    linear-gradient(#f0f0f0 50%, transparent 50%);
-  background-size: 20px 20px;
-  animation: loading 1.5s ease-in-out infinite;
+/* Loading and Animation Effects */
+.biological-card {
+  animation: slideUp 0.6s ease forwards;
 }
 
-@keyframes loading {
-  0% {
-    background-position: 0% 0%;
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
   }
-  100% {
-    background-position: 100% 100%;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* Accessibility Improvements */
-.biological-product-card:focus-within {
-  outline: 2px solid #059669;
+/* Add staggered animation delay for cards */
+.biological-card:nth-child(1) { animation-delay: 0.1s; }
+.biological-card:nth-child(2) { animation-delay: 0.2s; }
+.biological-card:nth-child(3) { animation-delay: 0.3s; }
+.biological-card:nth-child(4) { animation-delay: 0.4s; }
+.biological-card:nth-child(5) { animation-delay: 0.5s; }
+.biological-card:nth-child(6) { animation-delay: 0.6s; }
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #219a52, #27ae60);
+}
+
+/* Focus States for Accessibility */
+.biological-card:focus,
+.back-button:focus {
+  outline: 3px solid #3498db;
   outline-offset: 2px;
 }
 
 /* Print Styles */
 @media print {
   .biological-products-container {
-    background-color: white;
-    padding: 1rem;
+    background: none;
+    box-shadow: none;
   }
   
-  .biological-product-card {
+  .biological-card {
     break-inside: avoid;
     box-shadow: none;
-    border: 1px solid #ddd;
+    border: 1px solid #ccc;
   }
   
-  .biological-product-card:hover {
-    transform: none;
+  .click-hint {
+    display: none;
   }
 }

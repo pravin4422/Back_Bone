@@ -1,294 +1,364 @@
 /* AgroChemical.css */
 
-.chemical-category-container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  padding: 2rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* Root Variables */
+:root {
+  --primary-color: #2c5530;
+  --primary-light: #4a7c59;
+  --primary-dark: #1a3d1f;
+  --secondary-color: #8bc34a;
+  --accent-color: #ff6b35;
+  --background-color: #f8fdf9;
+  --card-background: #ffffff;
+  --text-primary: #2d3748;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+  --border-color: #e2e8f0;
+  --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --shadow-heavy: 0 8px 32px rgba(0, 0, 0, 0.2);
+  --border-radius: 12px;
+  --border-radius-small: 8px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Tabs Styling */
+/* Container */
+.agro-chemical-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: var(--background-color);
+  min-height: 100vh;
+}
+
+/* Header Section */
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.025em;
+}
+
+.section-subtitle {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Tab Navigation */
 .chemical-tabs {
   display: flex;
   justify-content: center;
-  margin-bottom: 3rem;
-  gap: 0;
+  margin-bottom: 2.5rem;
+  background: var(--card-background);
+  border-radius: var(--border-radius);
+  padding: 0.5rem;
+  box-shadow: var(--shadow-light);
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
-.chemical-tabs button {
-  padding: 1rem 2rem;
-  font-size: 1.1rem;
-  font-weight: 600;
+.tab-button {
+  background: transparent;
   border: none;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-radius: var(--border-radius-small);
   cursor: pointer;
-  transition: all 0.3s ease;
-  background: white;
-  color: #6b7280;
-  border: 2px solid #e5e7eb;
+  transition: var(--transition);
+  white-space: nowrap;
   position: relative;
-  min-width: 180px;
+  overflow: hidden;
 }
 
-.chemical-tabs button:first-child {
-  border-radius: 12px 0 0 12px;
-  border-right: 1px solid #e5e7eb;
+.tab-button:hover {
+  background-color: rgba(139, 195, 74, 0.1);
+  color: var(--primary-color);
+  transform: translateY(-1px);
 }
 
-.chemical-tabs button:last-child {
-  border-radius: 0 12px 12px 0;
-  border-left: 1px solid #e5e7eb;
-}
-
-.chemical-tabs button:not(:first-child):not(:last-child) {
-  border-left: 1px solid #e5e7eb;
-  border-right: 1px solid #e5e7eb;
-}
-
-.chemical-tabs button:hover {
-  background: #f9fafb;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.chemical-tabs button.active {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+.tab-button.active {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
   color: white;
-  border-color: #10b981;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
-  z-index: 1;
+  box-shadow: var(--shadow-medium);
 }
 
-.chemical-tabs button.active::before {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #10b981, #34d399, #10b981);
-  border-radius: 2px;
+.tab-button:focus {
+  outline: none;
+  ring: 2px solid var(--secondary-color);
+  ring-offset: 2px;
+}
+
+/* Content Area */
+.chemical-content {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.category-info {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.category-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.category-count {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 /* Card Grid */
 .chemical-card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
-  max-width: 1400px;
-  margin: 0 auto;
-  animation: fadeInUp 0.8s ease-out;
-}
-
-@media (min-width: 768px) {
-  .chemical-card-grid {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  }
-}
-
-@media (min-width: 1200px) {
-  .chemical-card-grid {
-    grid-template-columns: repeat(5, 1fr);
-  }
+  margin-top: 2rem;
 }
 
 /* Individual Cards */
 .chemical-card {
-  position: relative;
-  background: white;
-  border-radius: 20px;
+  background: var(--card-background);
+  border-radius: var(--border-radius);
   overflow: hidden;
+  box-shadow: var(--shadow-light);
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  height: 250px;
-  animation: slideInUp 0.6s ease-out forwards;
-  opacity: 0;
-  transform: translateY(30px);
+  transition: var(--transition);
+  border: 1px solid var(--border-color);
+  position: relative;
 }
-
-.chemical-card:nth-child(1) { animation-delay: 0.1s; }
-.chemical-card:nth-child(2) { animation-delay: 0.2s; }
-.chemical-card:nth-child(3) { animation-delay: 0.3s; }
-.chemical-card:nth-child(4) { animation-delay: 0.4s; }
-.chemical-card:nth-child(5) { animation-delay: 0.5s; }
 
 .chemical-card:hover {
-  transform: translateY(-12px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-heavy);
+  border-color: var(--secondary-color);
 }
 
-.chemical-card img {
+.chemical-card:focus {
+  outline: none;
+  ring: 2px solid var(--secondary-color);
+  ring-offset: 2px;
+}
+
+/* Card Image Container */
+.card-image-container {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.card-image-container img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
+  transition: var(--transition);
 }
 
-.chemical-card:hover img {
-  transform: scale(1.1);
+.chemical-card:hover .card-image-container img {
+  transform: scale(1.05);
 }
 
-/* Card Label */
-.card-label {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-  color: white;
-  padding: 2rem 1.5rem 1.5rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  text-align: center;
-  transition: all 0.3s ease;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.chemical-card:hover .card-label {
-  background: linear-gradient(transparent, rgba(16, 185, 129, 0.9));
-  padding-bottom: 2rem;
-}
-
-/* Hover Effect Overlay */
-.chemical-card::before {
-  content: '';
+/* Card Overlay */
+.card-overlay {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2));
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 1;
-}
-
-.chemical-card:hover::before {
-  opacity: 1;
-}
-
-/* Arrow Icon on Hover */
-.chemical-card::after {
-  content: '→';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  font-size: 2rem;
-  color: white;
-  background: rgba(255, 255, 255, 0.2);
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    rgba(44, 85, 48, 0.8),
+    rgba(139, 195, 74, 0.8)
+  );
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  z-index: 2;
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  opacity: 0;
+  transition: var(--transition);
 }
 
-.chemical-card:hover::after {
-  transform: translate(-50%, -50%) scale(1);
+.chemical-card:hover .card-overlay {
+  opacity: 1;
 }
 
-/* Animations */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.card-action {
+  background: white;
+  color: var(--primary-color);
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.875rem;
+  box-shadow: var(--shadow-medium);
 }
 
-@keyframes slideInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Card Content */
+.card-content {
+  padding: 1.5rem;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.card-description {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Loading States */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--border-color);
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-overlay p {
+  color: var(--text-secondary);
+  font-weight: 500;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .chemical-category-container {
+  .agro-chemical-container {
     padding: 1rem;
   }
-  
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .section-subtitle {
+    font-size: 1rem;
+  }
+
   .chemical-tabs {
     flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
+    align-items: stretch;
   }
-  
-  .chemical-tabs button {
-    width: 100%;
-    max-width: 300px;
-    border-radius: 12px !important;
-    border: 2px solid #e5e7eb !important;
+
+  .tab-button {
+    text-align: center;
+    margin: 0;
   }
-  
+
   .chemical-card-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
-  .chemical-card {
-    height: 200px;
+
+  .category-title {
+    font-size: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
-  .chemical-tabs button {
-    padding: 0.8rem 1.5rem;
-    font-size: 1rem;
+  .section-header {
+    margin-bottom: 2rem;
+    padding: 1rem 0;
   }
-  
-  .card-label {
-    font-size: 1rem;
-    padding: 1.5rem 1rem 1rem;
-  }
-}
 
-/* Loading State */
-.chemical-card-grid.loading .chemical-card {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: loading 1.5s infinite;
-}
-
-@keyframes loading {
-  0% {
-    background-position: 200% 0;
+  .section-title {
+    font-size: 1.75rem;
   }
-  100% {
-    background-position: -200% 0;
+
+  .card-content {
+    padding: 1rem;
+  }
+
+  .card-image-container {
+    height: 150px;
   }
 }
 
-/* Focus States for Accessibility */
-.chemical-tabs button:focus {
-  outline: 3px solid rgba(16, 185, 129, 0.5);
-  outline-offset: 2px;
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --border-color: #000000;
+    --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.4);
+  }
 }
 
-.chemical-card:focus {
-  outline: 3px solid rgba(16, 185, 129, 0.5);
-  outline-offset: 4px;
-}.agrochemical-container {
-  padding: 2rem;
-  background: #f8fafc;
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
-.agrochemical-title {
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
-.agrochemical-description {
-  font-size: 1.2rem;
-  color: #555;
+
+/* Print styles */
+@media print {
+  .agro-chemical-container {
+    background: white;
+    box-shadow: none;
+  }
+
+  .chemical-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+
+  .card-overlay {
+    display: none;
+  }
 }

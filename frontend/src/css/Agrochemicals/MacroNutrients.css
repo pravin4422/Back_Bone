@@ -1,0 +1,272 @@
+/* MacroNutrients.css */
+
+/* Container Styles */
+.macronutrients-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header Styles */
+.macronutrients-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.macronutrients-header h1 {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.macronutrients-header p {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Grid Layout */
+.macronutrients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+  margin-top: 30px;
+}
+
+/* Nutrient Card Styles */
+.macronutrient-card {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.macronutrient-card.clickable {
+  cursor: pointer;
+}
+
+.macronutrient-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-color: #3498db;
+}
+
+.macronutrient-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.macronutrient-info h3 {
+  font-size: 1.3rem;
+  color: #2c3e50;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.macronutrient-category {
+  display: inline-block;
+  background: #3498db;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
+.macronutrient-info p {
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 15px;
+  font-size: 0.95rem;
+}
+
+.click-hint {
+  display: none;
+}
+
+/* Detail View Styles */
+.macronutrient-detail-view {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.detail-header {
+  margin-bottom: 30px;
+}
+
+.back-button {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background: #2980b9;
+}
+
+.detail-header h1 {
+  font-size: 2.2rem;
+  color: #2c3e50;
+  margin: 0;
+  font-weight: 600;
+}
+
+.detail-content {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* Detail Image Section */
+.detail-image-section {
+  position: relative;
+}
+
+.detail-image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.category-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: rgba(52, 152, 219, 0.9);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+/* Info Section */
+.detail-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.info-card {
+  background: #f8f9fa;
+  padding: 18px;
+  border-radius: 6px;
+  border-left: 4px solid #3498db;
+}
+
+.info-card h3 {
+  font-size: 1rem;
+  color: #2c3e50;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.info-card p {
+  color: #555;
+  margin: 0;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.basic-info {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 25px;
+}
+
+.basic-info h3 {
+  font-size: 1.3rem;
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.basic-info p {
+  color: #555;
+  line-height: 1.7;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .macronutrients-container {
+    padding: 15px;
+  }
+  
+  .macronutrients-header h1 {
+    font-size: 2rem;
+  }
+  
+  .macronutrients-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .detail-content {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+  
+  .detail-image {
+    height: 250px;
+  }
+  
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .macronutrient-card {
+    padding: 15px;
+  }
+  
+  .detail-header h1 {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .macronutrients-header h1 {
+    font-size: 1.7rem;
+  }
+  
+  .macronutrient-image {
+    height: 150px;
+  }
+  
+  .detail-image {
+    height: 200px;
+  }
+  
+  .basic-info {
+    padding: 20px;
+  }
+}

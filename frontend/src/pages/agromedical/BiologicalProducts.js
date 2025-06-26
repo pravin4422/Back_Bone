@@ -1,490 +1,537 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../../css/Agrochemicals/BiologicalProducts.css';
 
+// Separate component for biological product card
+const BiologicalProductCard = ({ product, onClick }) => (
+  <div 
+    className="biological-card clickable"
+    onClick={() => onClick(product)}
+  >
+    <img src={product.image} alt={product.name} className="biological-image" />
+    <div className="biological-info">
+      <h3>{product.name}</h3>
+      <span className="biological-category">{product.category}</span>
+      <p>{product.content}</p>
+      <div className="click-hint">Click for detailed information</div>
+    </div>
+  </div>
+);
+
+// Separate component for detailed view
+const BiologicalProductDetailView = ({ product, onBack }) => (
+  <div className="biological-detail-view">
+    <div className="detail-header">
+      <button className="back-button" onClick={onBack}>
+        ← Back to Products
+      </button>
+      <h1>{product.name}</h1>
+    </div>
+
+    <div className="detail-content">
+      <div className="detail-image-section">
+        <img 
+          src={product.image} 
+          alt={product.name}
+          className="detail-image"
+        />
+        <div className="category-badge">
+          {product.category}
+        </div>
+      </div>
+
+      <div className="detail-info-section">
+        <div className="info-grid">
+          <InfoCard title="Active Organism" value={product.detailedInfo?.activeOrganism} />
+          <InfoCard title="CFU Count" value={product.detailedInfo?.cfuCount} />
+          <InfoCard title="Mode of Action" value={product.detailedInfo?.modeOfAction} />
+          <InfoCard title="Target Pests/Diseases" value={product.detailedInfo?.targetPests} />
+          <InfoCard title="Application Rate" value={product.detailedInfo?.applicationRate} />
+          <InfoCard title="Crop Compatibility" value={product.detailedInfo?.cropCompatibility} />
+          <InfoCard title="Application Method" value={product.detailedInfo?.applicationMethod} />
+          <InfoCard title="Storage Instructions" value={product.detailedInfo?.storageInstructions} />
+        </div>
+
+        <div className="basic-info">
+          <h3>Overview</h3>
+          <p>{product.content}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+// Reusable info card component
+const InfoCard = ({ title, value }) => (
+  <div className="info-card">
+    <h3>{title}</h3>
+    <p>{value || "Information not available"}</p>
+  </div>
+);
+
 function BiologicalProducts() {
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  // Complete biological products data
   const biologicalProducts = [
     {
       id: 1,
       name: "Trichoderma Viride Bio",
-      image: "/assets/biological/trichoderma-viride.jpg",
-      category: "Bio-Fungicide",
-      content: "Active Ingredient: Trichoderma viride – Soil-borne fungal diseases control in various crops."
+      image: "/assets/biologicals/trichoderma.jpg",
+      category: "Fungal Biocontrol",
+      content: "Active Organism: Trichoderma viride – Biological fungicide for soil-borne disease control.",
+      detailedInfo: {
+        activeOrganism: "Trichoderma viride",
+        cfuCount: "1 x 10^8 CFU/g",
+        modeOfAction: "Mycoparasitism, antibiosis, competition for nutrients",
+        targetPests: "Root rot, wilt diseases, damping off, collar rot",
+        applicationRate: "2-3 kg/ha soil application, 2-3 g/L seed treatment",
+        cropCompatibility: "All crops - vegetables, cereals, pulses, cotton",
+        applicationMethod: "Soil application, seed treatment, seedling dip",
+        storageInstructions: "Store in cool, dry place below 25°C, avoid direct sunlight"
+      }
     },
     {
       id: 2,
-      name: "Bacillus Subtilis Pro",
-      image: "/assets/biological/bacillus-subtilis.jpg",
-      category: "Bio-Fungicide",
-      content: "Active Ingredient: Bacillus subtilis – Root rot, damping off, and foliar disease control."
+      name: "Bacillus thuringiensis Pro",
+      image: "/assets/biologicals/bt.jpg",
+      category: "Bacterial Insecticide",
+      content: "Active Organism: Bacillus thuringiensis – Biological insecticide for lepidopteran larvae.",
+      detailedInfo: {
+        activeOrganism: "Bacillus thuringiensis var. kurstaki",
+        cfuCount: "5 x 10^9 CFU/g",
+        modeOfAction: "Production of crystal proteins toxic to lepidopteran larvae",
+        targetPests: "Bollworms, armyworms, cabbage worms, fruit borers",
+        applicationRate: "1-2 kg/ha foliar spray, 500-750 g/ha for vegetables",
+        cropCompatibility: "Cotton, vegetables, fruit crops, cereals",
+        applicationMethod: "Foliar spray, best applied in evening hours",
+        storageInstructions: "Store in refrigerated conditions, protect from heat and moisture"
+      }
     },
     {
       id: 3,
-      name: "Pseudomonas Fluorescens",
-      image: "/assets/biological/pseudomonas.jpg",
-      category: "Bio-Fungicide",
-      content: "Active Ingredient: Pseudomonas fluorescens – Wilt, blight, and bacterial disease management."
+      name: "Pseudomonas Fluorescens Max",
+      image: "/assets/biologicals/pseudomonas.jpg",
+      category: "Bacterial Biocontrol",
+      content: "Active Organism: Pseudomonas fluorescens – PGPR and biocontrol agent.",
+      detailedInfo: {
+        activeOrganism: "Pseudomonas fluorescens",
+        cfuCount: "1 x 10^9 CFU/g",
+        modeOfAction: "Antibiosis, siderophore production, ISR induction",
+        targetPests: "Bacterial wilt, root rot, fusarium wilt, rhizoctonia",
+        applicationRate: "2-3 kg/ha soil application, 5-10 g/L seed treatment",
+        cropCompatibility: "Tomato, potato, banana, cotton, rice, wheat",
+        applicationMethod: "Soil application, seed treatment, root dip",
+        storageInstructions: "Store in cool place below 30°C, use within 12 months"
+      }
     },
     {
       id: 4,
-      name: "Beauveria Bassiana Max",
-      image: "/assets/biological/beauveria-bassiana.jpg",
-      category: "Bio-Insecticide",
-      content: "Active Ingredient: Beauveria bassiana – Entomopathogenic fungi for insect pest control."
+      name: "Beauveria Bassiana Elite",
+      image: "/assets/biologicals/beauveria.jpg",
+      category: "Entomopathogenic Fungus",
+      content: "Active Organism: Beauveria bassiana – Fungal insecticide for sucking and chewing pests.",
+      detailedInfo: {
+        activeOrganism: "Beauveria bassiana",
+        cfuCount: "1 x 10^8 CFU/g",
+        modeOfAction: "Spore adhesion, penetration, and colonization of insect body",
+        targetPests: "Thrips, aphids, whiteflies, termites, beetles",
+        applicationRate: "2-3 kg/ha foliar spray, 5-10 kg/ha soil application",
+        cropCompatibility: "Vegetables, cotton, sugarcane, fruit crops",
+        applicationMethod: "Foliar spray, soil drench, apply during cooler hours",
+        storageInstructions: "Store in dry place below 25°C, avoid direct sunlight"
+      }
     },
     {
       id: 5,
-      name: "Metarhizium Anisopliae",
-      image: "/assets/biological/metarhizium.jpg",
-      category: "Bio-Insecticide",
-      content: "Active Ingredient: Metarhizium anisopliae – Controls termites, white grubs, and soil insects."
+      name: "Metarhizium Anisopliae Super",
+      image: "/assets/biologicals/metarhizium.jpg",
+      category: "Entomopathogenic Fungus",
+      content: "Active Organism: Metarhizium anisopliae – Biological control for soil-dwelling pests.",
+      detailedInfo: {
+        activeOrganism: "Metarhizium anisopliae",
+        cfuCount: "1 x 10^8 CFU/g",
+        modeOfAction: "Fungal infection and colonization of insect cuticle",
+        targetPests: "Termites, grubs, root weevils, wireworms",
+        applicationRate: "5-10 kg/ha soil application",
+        cropCompatibility: "Sugarcane, potato, vegetables, fruit crops",
+        applicationMethod: "Soil application, incorporate into soil",
+        storageInstructions: "Store in cool, dry conditions below 25°C"
+      }
     },
     {
       id: 6,
-      name: "NPV Helicoverpa",
-      image: "/assets/biological/npv-helicoverpa.jpg",
-      category: "Bio-Insecticide",
-      content: "Active Ingredient: Helicoverpa NPV – Specific control of bollworm and pod borer."
+      name: "Paecilomyces Lilacinus Bio",
+      image: "/assets/biologicals/paecilomyces.jpg",
+      category: "Nematophagous Fungus",
+      content: "Active Organism: Paecilomyces lilacinus – Biological nematicide and soil health enhancer.",
+      detailedInfo: {
+        activeOrganism: "Paecilomyces lilacinus",
+        cfuCount: "1 x 10^8 CFU/g",
+        modeOfAction: "Parasitizes nematode eggs and juveniles",
+        targetPests: "Root-knot nematodes, cyst nematodes, reniform nematodes",
+        applicationRate: "2.5-5 kg/ha soil application",
+        cropCompatibility: "Vegetables, fruit crops, ornamentals, nursery plants",
+        applicationMethod: "Soil incorporation, nursery bed treatment",
+        storageInstructions: "Store in cool place, protect from moisture and heat"
+      }
     },
     {
       id: 7,
-      name: "NPV Spodoptera",
-      image: "/assets/biological/npv-spodoptera.jpg",
-      category: "Bio-Insecticide",
-      content: "Active Ingredient: Spodoptera NPV – Army worm and cutworm specific control."
+      name: "Verticillium Lecanii Pro",
+      image: "/assets/biologicals/verticillium.jpg",
+      category: "Entomopathogenic Fungus",
+      content: "Active Organism: Verticillium lecanii – Biocontrol for aphids and whiteflies.",
+      detailedInfo: {
+        activeOrganism: "Verticillium lecanii",
+        cfuCount: "1 x 10^8 CFU/g",
+        modeOfAction: "Fungal infection of soft-bodied insects",
+        targetPests: "Aphids, whiteflies, thrips, mealybugs, scale insects",
+        applicationRate: "2-3 kg/ha foliar application",
+        cropCompatibility: "Vegetables, cotton, ornamentals, greenhouse crops",
+        applicationMethod: "Foliar spray, apply in humid conditions",
+        storageInstructions: "Store below 25°C in dry conditions"
+      }
     },
     {
       id: 8,
-      name: "Lecanicillium Lecanii",
-      image: "/assets/biological/lecanicillium.jpg",
-      category: "Bio-Insecticide",
-      content: "Active Ingredient: Lecanicillium lecanii – Aphids, whiteflies, and thrips control."
+      name: "NPV Helicoverpa Max",
+      image: "/assets/biologicals/npv.jpg",
+      category: "Viral Insecticide",
+      content: "Active Pathogen: Helicoverpa NPV – Species-specific viral insecticide for bollworms.",
+      detailedInfo: {
+        activeOrganism: "Helicoverpa armigera Nuclear Polyhedrosis Virus",
+        cfuCount: "1 x 10^12 POB/g",
+        modeOfAction: "Viral infection causing larval mortality",
+        targetPests: "Helicoverpa armigera (American bollworm)",
+        applicationRate: "250-500 g/ha depending on larval density",
+        cropCompatibility: "Cotton, tomato, chickpea, pigeonpea, maize",
+        applicationMethod: "Foliar spray in evening, add UV protectant",
+        storageInstructions: "Store in refrigerated conditions, protect from UV light"
+      }
     },
     {
       id: 9,
-      name: "Paecilomyces Lilacinus",
-      image: "/assets/biological/paecilomyces.jpg",
-      category: "Bio-Nematicide",
-      content: "Active Ingredient: Paecilomyces lilacinus – Root-knot and cyst nematode control."
+      name: "Azotobacter Chroococcum Gold",
+      image: "/assets/biologicals/azotobacter.jpg",
+      category: "Nitrogen Fixing Bacteria",
+      content: "Active Organism: Azotobacter chroococcum – Free-living nitrogen-fixing bacteria.",
+      detailedInfo: {
+        activeOrganism: "Azotobacter chroococcum",
+        cfuCount: "1 x 10^9 CFU/g",
+        modeOfAction: "Atmospheric nitrogen fixation, growth hormone production",
+        targetPests: "Nutrient deficiency, poor plant growth",
+        applicationRate: "2-3 kg/ha soil application, 10 g/kg seed treatment",
+        cropCompatibility: "All non-leguminous crops - cereals, vegetables, cotton",
+        applicationMethod: "Soil application, seed treatment, seedling root dip",
+        storageInstructions: "Store in cool place below 30°C, avoid direct sunlight"
+      }
     },
     {
       id: 10,
-      name: "Pochonia Chlamydosporia",
-      image: "/assets/biological/pochonia.jpg",
-      category: "Bio-Nematicide",
-      content: "Active Ingredient: Pochonia chlamydosporia – Egg parasitic fungi for nematode control."
+      name: "Rhizobium Leguminosarum Elite",
+      image: "/assets/biologicals/rhizobium.jpg",
+      category: "Symbiotic Nitrogen Fixer",
+      content: "Active Organism: Rhizobium leguminosarum – Symbiotic nitrogen fixation for legumes.",
+      detailedInfo: {
+        activeOrganism: "Rhizobium leguminosarum",
+        cfuCount: "1 x 10^9 CFU/g",
+        modeOfAction: "Root nodulation and symbiotic nitrogen fixation",
+        targetPests: "Nitrogen deficiency in leguminous crops",
+        applicationRate: "200-250 g per 10 kg seeds",
+        cropCompatibility: "Pea, lentil, chickpea, beans, clover",
+        applicationMethod: "Seed inoculation before sowing",
+        storageInstructions: "Store in refrigerated conditions, use before expiry"
+      }
     },
     {
       id: 11,
-      name: "Rhizobium Bio-Fix",
-      image: "/assets/biological/rhizobium.jpg",
-      category: "Biofertilizer",
-      content: "Active Ingredient: Rhizobium species – Nitrogen fixation in leguminous crops."
+      name: "Phosphate Solubilizing Bacteria",
+      image: "/assets/biologicals/psb.jpg",
+      category: "Phosphorus Mobilizer",
+      content: "Active Organism: Mixed PSB strains – Phosphate solubilizing and mobilizing bacteria.",
+      detailedInfo: {
+        activeOrganism: "Bacillus megaterium, Pseudomonas striata",
+        cfuCount: "1 x 10^9 CFU/g",
+        modeOfAction: "Solubilization of insoluble phosphates, organic acid production",
+        targetPests: "Phosphorus deficiency, poor root development",
+        applicationRate: "2-3 kg/ha soil application, 10 g/kg seed treatment",
+        cropCompatibility: "All crops - cereals, pulses, vegetables, fruit crops",
+        applicationMethod: "Soil application, seed treatment, seedling dip",
+        storageInstructions: "Store in cool, dry place below 25°C"
+      }
     },
     {
       id: 12,
-      name: "Azotobacter Super",
-      image: "/assets/biological/azotobacter.jpg",
-      category: "Biofertilizer",
-      content: "Active Ingredient: Azotobacter chroococcum – Free-living nitrogen fixing bacteria."
+      name: "Potash Mobilizing Bacteria",
+      image: "/assets/biologicals/kmb.jpg",
+      category: "Potassium Mobilizer",
+      content: "Active Organism: KMB strains – Potash mobilizing bacteria for potassium availability.",
+      detailedInfo: {
+        activeOrganism: "Frateuria aurantia",
+        cfuCount: "1 x 10^9 CFU/g",
+        modeOfAction: "Mobilization of fixed potassium from soil minerals",
+        targetPests: "Potassium deficiency, poor fruit quality",
+        applicationRate: "2-3 kg/ha soil application",
+        cropCompatibility: "Fruit crops, vegetables, cereals, cotton",
+        applicationMethod: "Soil application, drip irrigation",
+        storageInstructions: "Store below 30°C in dry conditions"
+      }
     },
     {
       id: 13,
-      name: "Azospirillum Elite",
-      image: "/assets/biological/azospirillum.jpg",
-      category: "Biofertilizer",
-      content: "Active Ingredient: Azospirillum brasilense – Nitrogen fixation for cereal crops."
+      name: "Mycorrhiza VAM Bio",
+      image: "/assets/biologicals/mycorrhiza.jpg",
+      category: "Beneficial Fungi",
+      content: "Active Organism: VAM fungi – Vesicular Arbuscular Mycorrhiza for nutrient uptake.",
+      detailedInfo: {
+        activeOrganism: "Glomus mosseae, G. fasciculatum, G. intraradices",
+        cfuCount: "100 IP/g (Infective Propagules)",
+        modeOfAction: "Root colonization, enhanced nutrient and water uptake",
+        targetPests: "Nutrient deficiency, drought stress, poor growth",
+        applicationRate: "5-10 kg/ha soil application",
+        cropCompatibility: "Most crops except brassicas and chenopods",
+        applicationMethod: "Soil application, transplant dip, nursery treatment",
+        storageInstructions: "Store in cool place, protect from moisture"
+      }
     },
     {
       id: 14,
-      name: "PSB Phosphate Gold",
-      image: "/assets/biological/psb.jpg",
-      category: "Biofertilizer",
-      content: "Active Ingredient: Phosphate Solubilizing Bacteria – Phosphorus mobilization."
+      name: "Acetobacter Diazotrophicus",
+      image: "/assets/biologicals/acetobacter.jpg",
+      category: "Endophytic Bacteria",
+      content: "Active Organism: Acetobacter diazotrophicus – Endophytic nitrogen fixer for sugarcane.",
+      detailedInfo: {
+        activeOrganism: "Acetobacter diazotrophicus",
+        cfuCount: "1 x 10^9 CFU/g",
+        modeOfAction: "Endophytic colonization, nitrogen fixation, growth promotion",
+        targetPests: "Nitrogen deficiency in sugarcane",
+        applicationRate: "2-3 kg/ha soil application",
+        cropCompatibility: "Sugarcane, sweet potato, coffee",
+        applicationMethod: "Soil application, sett treatment",
+        storageInstructions: "Store in cool conditions below 25°C"
+      }
     },
     {
       id: 15,
-      name: "KSB Potash Pro",
-      image: "/assets/biological/ksb.jpg",
-      category: "Biofertilizer",
-      content: "Active Ingredient: Potassium Solubilizing Bacteria – Potassium availability enhancement."
+      name: "Lecanicillium Muscarium",
+      image: "/assets/biologicals/lecanicillium.jpg",
+      category: "Entomopathogenic Fungus",
+      content: "Active Organism: Lecanicillium muscarium – Biocontrol for greenhouse whiteflies.",
+      detailedInfo: {
+        activeOrganism: "Lecanicillium muscarium",
+        cfuCount: "1 x 10^8 CFU/g",
+        modeOfAction: "Fungal infection and colonization of whiteflies",
+        targetPests: "Whiteflies, aphids, thrips in protected cultivation",
+        applicationRate: "1-2 kg/ha in greenhouse conditions",
+        cropCompatibility: "Greenhouse vegetables, ornamentals",
+        applicationMethod: "Foliar spray, maintain high humidity",
+        storageInstructions: "Store in refrigerated conditions"
+      }
     },
     {
       id: 16,
-      name: "Mycorrhiza VAM",
-      image: "/assets/biological/mycorrhiza.jpg",
-      category: "Biofertilizer",
-      content: "Active Ingredient: Vesicular Arbuscular Mycorrhiza – Root symbiosis for nutrient uptake."
+      name: "Nomuraea Rileyi Pro",
+      image: "/assets/biologicals/nomuraea.jpg",
+      category: "Entomopathogenic Fungus",
+      content: "Active Organism: Nomuraea rileyi – Natural enemy of lepidopteran larvae.",
+      detailedInfo: {
+        activeOrganism: "Nomuraea rileyi",
+        cfuCount: "1 x 10^8 CFU/g",
+        modeOfAction: "Fungal infection causing larval mortality",
+        targetPests: "Spodoptera, Helicoverpa, other lepidopteran larvae",
+        applicationRate: "2-3 kg/ha foliar application",
+        cropCompatibility: "Cotton, soybean, vegetables, field crops",
+        applicationMethod: "Foliar spray in humid conditions",
+        storageInstructions: "Store below 25°C, protect from direct light"
+      }
     },
     {
       id: 17,
-      name: "Acetobacter Premium",
-      image: "/assets/biological/acetobacter.jpg",
-      category: "Biofertilizer",
-      content: "Active Ingredient: Acetobacter diazotrophicus – Nitrogen fixation in sugarcane."
+      name: "Hirsutella Thompsonii",
+      image: "/assets/biologicals/hirsutella.jpg",
+      category: "Entomopathogenic Fungus",
+      content: "Active Organism: Hirsutella thompsonii – Specialized biocontrol for mites.",
+      detailedInfo: {
+        activeOrganism: "Hirsutella thompsonii",
+        cfuCount: "1 x 10^8 CFU/g",
+        modeOfAction: "Fungal infection specific to eriophyid mites",
+        targetPests: "Coconut mites, citrus rust mites, eriophyid mites",
+        applicationRate: "2-3 kg/ha depending on infestation",
+        cropCompatibility: "Coconut, citrus, tea, ornamentals",
+        applicationMethod: "Foliar spray, apply during humid weather",
+        storageInstructions: "Store in cool, humid conditions"
+      }
     },
     {
       id: 18,
-      name: "Trichogramma Cards",
-      image: "/assets/biological/trichogramma.jpg",
-      category: "Bio-Control Agent",
-      content: "Active Ingredient: Trichogramma species – Egg parasitoid for bollworm control."
+      name: "Bacillus Subtilis Max",
+      image: "/assets/biologicals/bacillus_subtilis.jpg",
+      category: "Bacterial Biocontrol",
+      content: "Active Organism: Bacillus subtilis – PGPR and biological fungicide.",
+      detailedInfo: {
+        activeOrganism: "Bacillus subtilis",
+        cfuCount: "1 x 10^9 CFU/g",
+        modeOfAction: "Antibiosis, competition, ISR induction",
+        targetPests: "Fusarium wilt, bacterial blight, powdery mildew",
+        applicationRate: "2-3 kg/ha soil application, 2-3 g/L foliar spray",
+        cropCompatibility: "Vegetables, cereals, cotton, fruit crops",
+        applicationMethod: "Soil application, foliar spray, seed treatment",
+        storageInstructions: "Store in dry place below 30°C"
+      }
     },
     {
       id: 19,
-      name: "Chrysoperla Predator",
-      image: "/assets/biological/chrysoperla.jpg",
-      category: "Bio-Control Agent",
-      content: "Active Ingredient: Chrysoperla carnea – Predatory insect for aphid control."
+      name: "Pochonia Chlamydosporia",
+      image: "/assets/biologicals/pochonia.jpg",
+      category: "Nematophagous Fungus",
+      content: "Active Organism: Pochonia chlamydosporia – Egg parasitic fungus for nematode control.",
+      detailedInfo: {
+        activeOrganism: "Pochonia chlamydosporia",
+        cfuCount: "1 x 10^8 CFU/g",
+        modeOfAction: "Parasitizes nematode females and eggs",
+        targetPests: "Root-knot nematodes, cyst nematodes",
+        applicationRate: "2.5-5 kg/ha soil application",
+        cropCompatibility: "Vegetables, fruit crops, banana, potato",
+        applicationMethod: "Soil incorporation before planting",
+        storageInstructions: "Store in cool, dry place below 25°C"
+      }
     },
     {
       id: 20,
-      name: "Cryptolaemus Beetle",
-      image: "/assets/biological/cryptolaemus.jpg",
-      category: "Bio-Control Agent",
-      content: "Active Ingredient: Cryptolaemus montrouzieri – Mealybug predator beetle."
+      name: "Entomopathogenic Nematodes",
+      image: "/assets/biologicals/epn.jpg",
+      category: "Beneficial Nematodes",
+      content: "Active Organism: Steinernema/Heterorhabditis – Insect parasitic nematodes.",
+      detailedInfo: {
+        activeOrganism: "Steinernema feltiae, Heterorhabditis indica",
+        cfuCount: "1 x 10^9 IJs/g (Infective Juveniles)",
+        modeOfAction: "Parasitizes soil-dwelling insect larvae",
+        targetPests: "Cutworms, root grubs, termites, thrips pupae",
+        applicationRate: "1-2 billion IJs/ha",
+        cropCompatibility: "Vegetables, ornamentals, turf grass",
+        applicationMethod: "Soil drench, irrigation application",
+        storageInstructions: "Store in refrigerated conditions, use quickly"
+      }
     },
     {
       id: 21,
-      name: "Trichoderma Harzianum",
-      image: "/assets/biological/trichoderma-harzianum.jpg",
-      category: "Bio-Fungicide",
-      content: "Active Ingredient: Trichoderma harzianum – Soil and seed treatment for disease control."
+      name: "Trichogramma Wasps",
+      image: "/assets/biologicals/trichogramma.jpg",
+      category: "Parasitic Wasp",
+      content: "Beneficial Insect: Trichogramma spp. – Egg parasitoids for lepidopteran pests.",
+      detailedInfo: {
+        activeOrganism: "Trichogramma chilonis, T. pretiosum",
+        cfuCount: "50,000-100,000 adults/ha",
+        modeOfAction: "Parasitizes lepidopteran eggs preventing larval development",
+        targetPests: "Bollworm eggs, stem borer eggs, fruit borer eggs",
+        applicationRate: "50,000-150,000 parasitoids/ha in 4-6 releases",
+        cropCompatibility: "Cotton, sugarcane, rice, vegetables, fruit crops",
+        applicationMethod: "Release cards or containers in field",
+        storageInstructions: "Release immediately or store briefly in cool conditions"
+      }
     },
     {
       id: 22,
-      name: "Trichoderma Reesei",
-      image: "/assets/biological/trichoderma-reesei.jpg",
-      category: "Bio-Fungicide",
-      content: "Active Ingredient: Trichoderma reesei – Cellulose decomposer and disease suppressor."
+      name: "Chrysoperla Carnea",
+      image: "/assets/biologicals/chrysoperla.jpg",
+      category: "Predatory Insect",
+      content: "Beneficial Insect: Chrysoperla carnea – Green lacewing predator for soft-bodied pests.",
+      detailedInfo: {
+        activeOrganism: "Chrysoperla carnea",
+        cfuCount: "5,000-10,000 larvae/ha",
+        modeOfAction: "Predation of aphids, thrips, whiteflies, small caterpillars",
+        targetPests: "Aphids, thrips, whiteflies, mites, small lepidopteran larvae",
+        applicationRate: "2,500-5,000 larvae/ha in multiple releases",
+        cropCompatibility: "Vegetables, cotton, fruit crops, ornamentals",
+        applicationMethod: "Release larvae directly in infested areas",
+        storageInstructions: "Release immediately upon receipt"
+      }
     },
     {
       id: 23,
-      name: "Gliocladium Virens",
-      image: "/assets/biological/gliocladium.jpg",
-      category: "Bio-Fungicide",
-      content: "Active Ingredient: Gliocladium virens – Soil-borne pathogen antagonist."
+      name: "Bacillus Amyloliquefaciens",
+      image: "/assets/biologicals/bacillus_amylo.jpg",
+      category: "Bacterial Biocontrol",
+      content: "Active Organism: Bacillus amyloliquefaciens – PGPR with broad-spectrum disease control.",
+      detailedInfo: {
+        activeOrganism: "Bacillus amyloliquefaciens",
+        cfuCount: "1 x 10^9 CFU/g",
+        modeOfAction: "Biofilm formation, lipopeptide production, competition",
+        targetPests: "Fusarium wilt, bacterial blight, powdery mildew, root rot",
+        applicationRate: "2-3 kg/ha soil application, 2-3 g/L spray",
+        cropCompatibility: "Vegetables, cereals, legumes, fruit crops",
+        applicationMethod: "Soil drench, foliar spray, seed treatment",
+        storageInstructions: "Store in cool, dry place below 25°C"
+      }
     },
     {
       id: 24,
-      name: "Chaetomium Globosum",
-      image: "/assets/biological/chaetomium.jpg",
-      category: "Bio-Fungicide",
-      content: "Active Ingredient: Chaetomium globosum – Seed treatment and foliar disease control."
+      name: "Streptomyces Lydicus",
+      image: "/assets/biologicals/streptomyces.jpg",
+      category: "Actinomycetes",
+      content: "Active Organism: Streptomyces lydicus – Antibiotic-producing biocontrol agent.",
+      detailedInfo: {
+        activeOrganism: "Streptomyces lydicus",
+        cfuCount: "1 x 10^8 CFU/g",
+        modeOfAction: "Antibiotic production, root colonization",
+        targetPests: "Fusarium, Rhizoctonia, Pythium, bacterial diseases",
+        applicationRate: "1-2 kg/ha soil application",
+        cropCompatibility: "Vegetables, ornamentals, greenhouse crops",
+        applicationMethod: "Soil incorporation, transplant treatment",
+        storageInstructions: "Store in cool, dry conditions"
+      }
     },
     {
       id: 25,
-      name: "Ampelomyces Quisqualis",
-      image: "/assets/biological/ampelomyces.jpg",
-      category: "Bio-Fungicide",
-      content: "Active Ingredient: Ampelomyces quisqualis – Powdery mildew hyperparasite."
-    },
-    {
-      id: 26,
-      name: "Coniothyrium Minitans",
-      image: "/assets/biological/coniothyrium.jpg",
-      category: "Bio-Fungicide",
-      content: "Active Ingredient: Coniothyrium minitans – Sclerotia parasitic fungus."
-    },
-    {
-      id: 27,
-      name: "Streptomyces Griseus",
-      image: "/assets/biological/streptomyces.jpg",
-      category: "Bio-Fungicide",
-      content: "Active Ingredient: Streptomyces griseus – Antibiotic producing actinomycete."
-    },
-    {
-      id: 28,
-      name: "Bacillus Thuringiensis",
-      image: "/assets/biological/bt.jpg",
-      category: "Bio-Insecticide",
-      content: "Active Ingredient: Bacillus thuringiensis – Crystal protein toxin for caterpillars."
-    },
-    {
-      id: 29,
-      name: "Bacillus Sphaericus",
-      image: "/assets/biological/bacillus-sphaericus.jpg",
-      category: "Bio-Insecticide",
-      content: "Active Ingredient: Bacillus sphaericus – Mosquito larvae specific control."
-    },
-    {
-      id: 30,
-      name: "Nomuraea Rileyi",
-      image: "/assets/biological/nomuraea.jpg",
-      category: "Bio-Insecticide",
-      content: "Active Ingredient: Nomuraea rileyi – Lepidopteran specific entomopathogenic fungi."
-    },
-    {
-      id: 31,
-      name: "Hirsutella Thompsonii",
-      image: "/assets/biological/hirsutella.jpg",
-      category: "Bio-Insecticide",
-      content: "Active Ingredient: Hirsutella thompsonii – Citrus rust mite specific fungus."
-    },
-    {
-      id: 32,
-      name: "Isaria Fumosorosea",
-      image: "/assets/biological/isaria.jpg",
-      category: "Bio-Insecticide",
-      content: "Active Ingredient: Isaria fumosorosea – Whitefly and thrips control fungus."
-    },
-    {
-      id: 33,
-      name: "Cordyceps Militaris",
-      image: "/assets/biological/cordyceps.jpg",
-      category: "Bio-Insecticide",
-      content: "Active Ingredient: Cordyceps militaris – Lepidopteran larvae parasitic fungus."
-    },
-    {
-      id: 34,
-      name: "Entomophaga Maimaiga",
-      image: "/assets/biological/entomophaga.jpg",
-      category: "Bio-Insecticide",
-      content: "Active Ingredient: Entomophaga maimaiga – Gypsy moth specific pathogen."
-    },
-    {
-      id: 35,
-      name: "Purpureocillium Lilacinum",
-      image: "/assets/biological/purpureocillium.jpg",
-      category: "Bio-Nematicide",
-      content: "Active Ingredient: Purpureocillium lilacinum – Nematode egg and juvenile destroyer."
-    },
-    {
-      id: 36,
-      name: "Arthrobotrys Oligospora",
-      image: "/assets/biological/arthrobotrys.jpg",
-      category: "Bio-Nematicide",
-      content: "Active Ingredient: Arthrobotrys oligospora – Nematode trapping fungus."
-    },
-    {
-      id: 37,
-      name: "Dactylellina Haptotyla",
-      image: "/assets/biological/dactylellina.jpg",
-      category: "Bio-Nematicide",
-      content: "Active Ingredient: Dactylellina haptotyla – Predatory nematophagous fungus."
-    },
-    {
-      id: 38,
-      name: "Hirsutella Rhossiliensis",
-      image: "/assets/biological/hirsutella-rhoss.jpg",
-      category: "Bio-Nematicide",
-      content: "Active Ingredient: Hirsutella rhossiliensis – Cyst and root-knot nematode control."
-    },
-    {
-      id: 39,
-      name: "Myrothecium Verrucaria",
-      image: "/assets/biological/myrothecium.jpg",
-      category: "Bio-Nematicide",
-      content: "Active Ingredient: Myrothecium verrucaria – Nematode egg parasitic fungus."
-    },
-    {
-      id: 40,
-      name: "Bradyrhizobium Elite",
-      image: "/assets/biological/bradyrhizobium.jpg",
-      category: "Biofertilizer",
-      content: "Active Ingredient: Bradyrhizobium japonicum – Soybean specific nitrogen fixation."
-    },
-    {
-      id: 41,
-      name: "Mesorhizobium Ciceri",
-      image: "/assets/biological/mesorhizobium.jpg",
-      category: "Biofertilizer",
-      content: "Active Ingredient: Mesorhizobium ciceri – Chickpea nitrogen fixing bacteria."
-    },
-    {
-      id: 42,
-      name: "Sinorhizobium Meliloti",
-      image: "/assets/biological/sinorhizobium.jpg",
-      category: "Biofertilizer",
-      content: "Active Ingredient: Sinorhizobium meliloti – Alfalfa and clover nitrogen fixation."
-    },
-    {
-      id: 43,
-      name: "Azorhizobium Caulinodans",
-      image: "/assets/biological/azorhizobium.jpg",
-      category: "Biofertilizer",
-      content: "Active Ingredient: Azorhizobium caulinodans – Stem nodulating nitrogen fixer."
-    },
-    {
-      id: 44,
-      name: "Herbaspirillum Seropedicae",
-      image: "/assets/biological/herbaspirillum.jpg",
-      category: "Biofertilizer",
-      content: "Active Ingredient: Herbaspirillum seropedicae – Endophytic nitrogen fixing bacteria."
-    },
-    {
-      id: 45,
-      name: "Gluconacetobacter Diazotrophicus",
-      image: "/assets/biological/gluconacetobacter.jpg",
-      category: "Biofertilizer",
-      content: "Active Ingredient: Gluconacetobacter diazotrophicus – Sugarcane endophytic bacteria."
-    },
-    {
-      id: 46,
-      name: "Frateuria Aurantia",
-      image: "/assets/biological/frateuria.jpg",
-      category: "Biofertilizer",
-      content: "Active Ingredient: Frateuria aurantia – Phosphate solubilizing orange bacteria."
-    },
-    {
-      id: 47,
-      name: "Bacillus Megaterium",
-      image: "/assets/biological/bacillus-megaterium.jpg",
-      category: "Biofertilizer",
-      content: "Active Ingredient: Bacillus megaterium – Phosphate and potassium solubilizer."
-    },
-    {
-      id: 48,
-      name: "Glomus Intraradices",
-      image: "/assets/biological/glomus-intra.jpg",
-      category: "Biofertilizer",
-      content: "Active Ingredient: Glomus intraradices – Root colonizing mycorrhizal fungus."
-    },
-    {
-      id: 49,
-      name: "Glomus Mosseae",
-      image: "/assets/biological/glomus-mosseae.jpg",
-      category: "Biofertilizer",
-      content: "Active Ingredient: Glomus mosseae – Phosphorus uptake enhancing mycorrhiza."
-    },
-    {
-      id: 50,
-      name: "Gigaspora Margarita",
-      image: "/assets/biological/gigaspora.jpg",
-      category: "Biofertilizer",
-      content: "Active Ingredient: Gigaspora margarita – Large spore mycorrhizal fungus."
-    },
-    {
-      id: 51,
-      name: "Acaulospora Laevis",
-      image: "/assets/biological/acaulospora.jpg",
-      category: "Biofertilizer",
-      content: "Active Ingredient: Acaulospora laevis – Drought tolerance enhancing mycorrhiza."
-    },
-    {
-      id: 52,
-      name: "Trichogramma Chilonis",
-      image: "/assets/biological/trichogramma-chilonis.jpg",
-      category: "Bio-Control Agent",
-      content: "Active Ingredient: Trichogramma chilonis – Rice stem borer egg parasitoid."
-    },
-    {
-      id: 53,
-      name: "Trichogramma Pretiosum",
-      image: "/assets/biological/trichogramma-pretiosum.jpg",
-      category: "Bio-Control Agent",
-      content: "Active Ingredient: Trichogramma pretiosum – Cotton bollworm egg parasitoid."
-    },
-    {
-      id: 54,
-      name: "Encarsia Formosa",
-      image: "/assets/biological/encarsia.jpg",
-      category: "Bio-Control Agent",
-      content: "Active Ingredient: Encarsia formosa – Whitefly parasitic wasp."
-    },
-    {
-      id: 55,
-      name: "Eretmocerus Eremicus",
-      image: "/assets/biological/eretmocerus.jpg",
-      category: "Bio-Control Agent",
-      content: "Active Ingredient: Eretmocerus eremicus – Whitefly and silverleaf control."
-    },
-    {
-      id: 56,
-      name: "Aphidius Colemani",
-      image: "/assets/biological/aphidius.jpg",
-      category: "Bio-Control Agent",
-      content: "Active Ingredient: Aphidius colemani – Aphid parasitic wasp for greenhouse."
-    },
-    {
-      id: 57,
-      name: "Lysiphlebus Testaceipes",
-      image: "/assets/biological/lysiphlebus.jpg",
-      category: "Bio-Control Agent",
-      content: "Active Ingredient: Lysiphlebus testaceipes – Cotton aphid parasitoid wasp."
-    },
-    {
-      id: 58,
-      name: "Neoseiulus Californicus",
-      image: "/assets/biological/neoseiulus.jpg",
-      category: "Bio-Control Agent",
-      content: "Active Ingredient: Neoseiulus californicus – Predatory mite for spider mite control."
-    },
-    {
-      id: 59,
-      name: "Phytoseiulus Persimilis",
-      image: "/assets/biological/phytoseiulus.jpg",
-      category: "Bio-Control Agent",
-      content: "Active Ingredient: Phytoseiulus persimilis – Two-spotted spider mite predator."
-    },
-    {
-      id: 60,
-      name: "Amblyseius Swirskii",
-      image: "/assets/biological/amblyseius.jpg",
-      category: "Bio-Control Agent",
-      content: "Active Ingredient: Amblyseius swirskii – Thrips and whitefly predatory mite."
-    },
-    {
-      id: 61,
-      name: "Orius Laevigatus",
-      image: "/assets/biological/orius.jpg",
-      category: "Bio-Control Agent",
-      content: "Active Ingredient: Orius laevigatus – Anthocorid bug for thrips control."
-    },
-    {
-      id: 62,
-      name: "Macrolophus Pygmaeus",
-      image: "/assets/biological/macrolophus.jpg",
-      category: "Bio-Control Agent",
-      content: "Active Ingredient: Macrolophus pygmaeus – Mirid bug for whitefly control."
-    },
-    {
-      id: 63,
-      name: "Nesidiocoris Tenuis",
-      image: "/assets/biological/nesidiocoris.jpg",
-      category: "Bio-Control Agent",
-      content: "Active Ingredient: Nesidiocoris tenuis – Predatory bug for tomato pests."
-    },
-    {
-      id: 64,
-      name: "Steinernema Carpocapsae",
-      image: "/assets/biological/steinernema.jpg",
-      category: "Bio-Insecticide",
-      content: "Active Ingredient: Steinernema carpocapsae – Entomopathogenic nematode for soil pests."
-    },
-    {
-      id: 65,
-      name: "Heterorhabditis Bacteriophora",
-      image: "/assets/biological/heterorhabditis.jpg",
-      category: "Bio-Insecticide",
-      content: "Active Ingredient: Heterorhabditis bacteriophora – Beneficial nematode for grub control."
-    },
-    {
-      id: 66,
-      name: "Steinernema Feltiae",
-      image: "/assets/biological/steinernema-feltiae.jpg",
-      category: "Bio-Insecticide",
-      content: "Active Ingredient: Steinernema feltiae – Entomopathogenic nematode for fungus gnats."
+      name: "Trichoderma Harzianum Elite",
+      image: "/assets/biologicals/trichoderma_harzianum.jpg",
+      category: "Fungal Biocontrol",
+      content: "Active Organism: Trichoderma harzianum – Aggressive biocontrol fungus.",
+      detailedInfo: {
+        activeOrganism: "Trichoderma harzianum",
+        cfuCount: "1 x 10^8 CFU/g",
+        modeOfAction: "Mycoparasitism, antibiosis, space competition",
+        targetPests: "Root rot, wilt diseases, stem rot, collar rot",
+        applicationRate: "2-3 kg/ha soil treatment, 2-3 g/L seed treatment",
+        cropCompatibility: "All crops, particularly effective in vegetables",
+        applicationMethod: "Soil application, seed treatment, transplant dip",
+        storageInstructions: "Store below 25°C in dry conditions"
+      }
     }
   ];
 
+  const handleProductClick = (product) => {
+    setSelectedProduct(product);
+  };
+
+  const handleBackClick = () => {
+    setSelectedProduct(null);
+  };
+
+  if (selectedProduct) {
+    return (
+      <BiologicalProductDetailView 
+        product={selectedProduct} 
+        onBack={handleBackClick} 
+      />
+    );
+  }
+
   return (
     <div className="biological-products-container">
-      <div className="biological-products-grid">
-        {biologicalProducts.map((item) => (
-          <div key={item.id} className="biological-product-card">
-            <img src={item.image} alt={item.name} className="biological-product-image" />
-            <div className="biological-product-info">
-              <h3>{item.name}</h3>
-              <span className="biological-product-category">{item.category}</span>
-              <p>{item.content}</p>
-            </div>
-          </div>
-        ))}
+      <div className="biological-products-header">
+        <h1>Biological Products</h1>
+        <p>Eco-friendly biological solutions for sustainable crop protection and growth enhancement</p>
       </div>
-
-      {/* Results Counter */}
-      <div className="biological-products-footer">
-        Showing {biologicalProducts.length} biological products
+      
+      <div className="biological-products-grid">
+        {biologicalProducts.map((product) => (
+          <BiologicalProductCard
+            key={product.id}
+            product={product}
+            onClick={handleProductClick}
+          />
+        ))}
       </div>
     </div>
   );
