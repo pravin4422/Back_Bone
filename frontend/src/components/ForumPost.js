@@ -1,101 +1,142 @@
-import React, { useState, useContext } from 'react';
-import ForumComment from '../pages/ForumComment';
+import React, { useState } from 'react';
 import '../css/Forum.css';
-import axios from 'axios';
-import { AuthContext } from '../context/AuthContext';
 
-function ForumPost({ post, token, setPosts }) {
-  const { user } = useContext(AuthContext);
+function ForumPost({ post, onDelete, onEditToggle, onUpdate, onLike }) {
+  const [editedTitle, setEditedTitle] = useState(post.title);
+  const [editedContent, setEditedContent] = useState(post.content);
+  const [commentText, setCommentText] = useState('');
   const [comments, setComments] = useState(post.comments || []);
-  const [showReplyForm, setShowReplyForm] = useState(false);
-  const [replyText, setReplyText] = useState('');
-  const [loadingComment, setLoadingComment] = useState(false);
 
-  const handleAddComment = async (e) => {
-    e.preventDefault();
-    if (!replyText.trim()) return;
+  const handleUpdate = () => {
+    if (!editedTitle.trim() || !editedContent.trim()) return;
 
-    if (!token) {
-      alert('Please login to comment');
-      return;
-    }
+    onUpdate(post._id, {
+      title: editedTitle,
+      content: editedContent,
+    });
+  };
 
-    try {
-      setLoadingComment(true);
-      const res = await axios.post(
-        `/api/forum/${post._id}/comments`,
-        { content: replyText },
-        { headers: { Authorization: `Bearer ${token}` } }
+  const handleAddComment = () => {
+    if (!commentText.trim()) return;
+    const newComments = [...comments, commentText.trim()];
+    setComments(newComments);
+    setCommentText('');
+
+    onUpdate(post._id, {
+      ...post,
+      comments: newComments,
+    });
+  };
+
+  const renderFiles = (files) => {
+    if (!files || files.length === 0) return null;
+
+    return files.map((file, index) => {
+      const { type, name, data } = file;
+
+      if (type.startsWith('image/')) {
+        return (
+          <img
+            key={index}
+            src={data}
+            alt={`Uploaded-${index}`}
+            className="forum-image"
+          />
+        );
+      }
+
+      const isPDF = type === 'application/pdf';
+
+      return (
+        <div key={index} className="forum-file-preview">
+          <p><strong>📎 Attachment:</strong> {name}</p>
+          {isPDF ? (
+            <iframe
+              src={data}
+              title={name}
+              className="forum-file-iframe"
+              frameBorder="0"
+            />
+          ) : (
+            <a
+              href={data}
+              download={name}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="forum-file-link"
+            >
+              📄 {name} (Download/View)
+            </a>
+          )}
+        </div>
       );
-
-      setComments(res.data.comments);
-      setPosts((prevPosts) =>
-        prevPosts.map((p) => (p._id === post._id ? res.data : p))
-      );
-
-      setReplyText('');
-      setShowReplyForm(false);
-    } catch {
-      alert('Failed to add comment');
-    } finally {
-      setLoadingComment(false);
-    }
+    });
   };
 
   return (
     <div className="forum-post">
-      <div className="post-header">
-        <h3>{post.title}</h3>
-        <span className="post-category">{post.category}</span>
-      </div>
-      <p>{post.content}</p>
-      {post.imageUrl && <img className="post-image" src={post.imageUrl} alt="Post" />}
-      <div className="post-footer">
-        <small>
-          By {post.authorName} | {new Date(post.createdAt).toLocaleString()}
-        </small>
-      </div>
+      {post.editable ? (
+        <>
+          <input
+            className="forum-edit-title"
+            value={editedTitle}
+            onChange={(e) => setEditedTitle(e.target.value)}
+          />
+          <textarea
+            className="forum-edit-content"
+            value={editedContent}
+            onChange={(e) => setEditedContent(e.target.value)}
+          />
+          <div className="forum-buttons">
+            <button onClick={handleUpdate}>✅ Save</button>
+            <button onClick={() => onEditToggle(post._id)}>❌ Cancel</button>
+          </div>
+        </>
+      ) : (
+        <>
+          <h3>{post.title}</h3>
+          <p className="forum-meta">📅 Posted on: {post.createdAt}</p>
+          <p>{post.content}</p>
 
-      <div className="comments-section">
-        <h4>Comments ({comments.length})</h4>
-        {comments.map((c) => (
-          <ForumComment key={c._id || c.id} comment={c} />
-        ))}
+          {/* Files */}
+          {renderFiles(post.files)}
 
-        {user ? (
-          showReplyForm ? (
-            <form onSubmit={handleAddComment} className="reply-form">
-              <textarea
-                placeholder="Write your reply..."
-                value={replyText}
-                onChange={(e) => setReplyText(e.target.value)}
-                required
-                disabled={loadingComment}
-              />
-              <button type="submit" disabled={loadingComment}>
-                {loadingComment ? 'Posting...' : 'Submit Reply'}
-              </button>
-              <button
-                type="button"
-                className="cancel-btn"
-                onClick={() => {
-                  setShowReplyForm(false);
-                  setReplyText('');
-                }}
-                disabled={loadingComment}
-              >
-                Cancel
-              </button>
-            </form>
-          ) : (
-            <button className="reply-btn" onClick={() => setShowReplyForm(true)}>
-              Reply
-            </button>
-          )
-        ) : (
-          <p>Please login to comment.</p>
-        )}
-      </div>
+          {/* Tags */}
+          {post.tags?.length > 0 && (
+            <div className="forum-tags">
+              {post.tags.map((tag, index) => (
+                <span key={index} className="forum-tag">#{tag}</span>
+              ))}
+            </div>
+          )}
+
+          {/* Action Buttons */}
+          <div className="forum-actions">
+            <button onClick={() => onLike(post._id)}>👍 {post.likes}</button>
+            <button onClick={() => onEditToggle(post._id)}>✏️ Edit</button>
+            <button onClick={() => onDelete(post._id)}>🗑️ Delete</button>
+          </div>
+
+          {/* Comments */}
+          <div className="forum-comments">
+            <h4>💬 Comments</h4>
+            {comments.length === 0 && <p className="no-comment">No comments yet.</p>}
+            <ul>
+              {comments.map((comment, index) => (
+                <li key={index}>🗨️ {comment}</li>
+              ))}
+            </ul>
+            <input
+              type="text"
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
+              placeholder="Write a comment..."
+              className="comment-input"
+            />
+            <button onClick={handleAddComment}>➕ Comment</button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

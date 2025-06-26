@@ -1,135 +1,105 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
+import ForumForm from '../components/ForumForm';
 import ForumPost from '../components/ForumPost';
 import '../css/Forum.css';
-import axios from 'axios';
-import { AuthContext } from '../context/AuthContext';
-
-const categories = ['General', 'Pests', 'Weather', 'Crop Advice', 'Other'];
 
 function Forum() {
-  const { user, token } = useContext(AuthContext);
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [newPost, setNewPost] = useState({
-    title: '',
-    content: '',
-    category: categories[0],
-    image: null,
-    imagePreview: null,
-  });
+  const [searchTerm, setSearchTerm] = useState('');
 
+  // Load from localStorage on mount
   useEffect(() => {
-    fetchPosts();
+    const saved = localStorage.getItem('forumPosts');
+    if (saved) {
+      setPosts(JSON.parse(saved));
+    }
   }, []);
 
-  const fetchPosts = async () => {
-    setLoading(true);
-    setError('');
-    try {
-      const res = await axios.get('/api/forum');
-      setPosts(res.data);
-    } catch (err) {
-      setError('Failed to load posts');
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Save to localStorage when posts change
+  useEffect(() => {
+    localStorage.setItem('forumPosts', JSON.stringify(posts));
+  }, [posts]);
 
-  const handleAddPost = async (e) => {
-    e.preventDefault();
-    if (!newPost.title.trim() || !newPost.content.trim()) {
-      alert('Please add title and content');
-      return;
-    }
-    if (!token) {
-      alert('Please login to add posts');
-      return;
-    }
-
-    try {
-      // For now, send only text data (image upload later)
-      const postData = {
-        title: newPost.title,
-        content: newPost.content,
-        category: newPost.category,
-        imageUrl: '', // empty for now
-      };
-
-      const res = await axios.post('/api/forum', postData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      setPosts([res.data, ...posts]);
-      setNewPost({ title: '', content: '', category: categories[0], image: null, imagePreview: null });
-    } catch {
-      alert('Failed to add post');
-    }
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setNewPost((prev) => ({ ...prev, image: file, imagePreview: reader.result }));
+  const addPost = (newPost) => {
+    const postWithExtras = {
+      ...newPost,
+      _id: Date.now(),
+      likes: 0,
+      editable: false,
+      createdAt: new Date().toLocaleString(),
+      user: {
+        username: 'Guest User', // For future login support
+        photoURL: '',           // Future profile picture support
+      },
     };
-    reader.readAsDataURL(file);
+    setPosts((prevPosts) => [postWithExtras, ...prevPosts]);
   };
+
+  const updatePost = (id, updatedData) => {
+    setPosts((prev) =>
+      prev.map((post) =>
+        post._id === id
+          ? { ...post, ...updatedData, editable: false }
+          : post
+      )
+    );
+  };
+
+  const deletePost = (id) => {
+    setPosts((prev) => prev.filter((post) => post._id !== id));
+  };
+
+  const toggleEditPost = (id) => {
+    setPosts((prev) =>
+      prev.map((post) =>
+        post._id === id ? { ...post, editable: !post.editable } : post
+      )
+    );
+  };
+
+  const likePost = (id) => {
+    setPosts((prev) =>
+      prev.map((post) =>
+        post._id === id ? { ...post, likes: post.likes + 1 } : post
+      )
+    );
+  };
+
+  const filteredPosts = posts.filter((post) =>
+    post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (post.tags || []).some((tag) =>
+      tag.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
 
   return (
     <div className="forum-container">
-      <h2>Farmer Forums</h2>
-
-      {user ? (
-        <form className="new-post-form" onSubmit={handleAddPost}>
-          <input
-            type="text"
-            placeholder="Post Title"
-            value={newPost.title}
-            onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
-            required
-          />
-          <textarea
-            placeholder="Write your post content here..."
-            value={newPost.content}
-            onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
-            required
-          />
-          <select
-            value={newPost.category}
-            onChange={(e) => setNewPost({ ...newPost, category: e.target.value })}
-          >
-            {categories.map((cat) => (
-              <option key={cat} value={cat}>{cat}</option>
-            ))}
-          </select>
-
-          <input type="file" accept="image/*" onChange={handleImageChange} />
-          {newPost.imagePreview && (
-            <img className="image-preview" src={newPost.imagePreview} alt="Preview" />
-          )}
-
-          <button type="submit">Add Post</button>
-        </form>
-      ) : (
-        <p>Please login to add posts.</p>
-      )}
-
-      {loading ? (
-        <p>Loading posts...</p>
-      ) : error ? (
-        <p className="error-text">{error}</p>
-      ) : posts.length === 0 ? (
-        <p>No posts yet. Be the first to add!</p>
-      ) : (
-        <div className="posts-list">
-          {posts.map((post) => (
-            <ForumPost key={post._id} post={post} token={token} setPosts={setPosts} />
-          ))}
-        </div>
-      )}
+      <h1 className="forum-title">👨‍🌾 Farmer Forum</h1>
+      <ForumForm onPost={addPost} />
+      <input
+        type="text"
+        placeholder="Search posts..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="forum-search"
+      />
+      <div className="forum-posts">
+        {filteredPosts.length === 0 ? (
+          <p style={{ textAlign: 'center', color: '#777' }}>No posts found.</p>
+        ) : (
+          filteredPosts.map((post) => (
+            <ForumPost
+              key={post._id}
+              post={post}
+              onDelete={deletePost}
+              onEditToggle={toggleEditPost}
+              onUpdate={updatePost}
+              onLike={likePost}
+            />
+          ))
+        )}
+      </div>
     </div>
   );
 }
